@@ -1,0 +1,1375 @@
+sections:
+  Item 1:
+    weight: high
+    max_tokens: 3500
+    description: Business overview
+    guidance: |-
+      This is the Business section - the foundation for understanding the company.
+
+      **CRITICAL: OPERATIONAL DRIVERS & GTM MECHANICS**
+      Understanding the business means understanding how the numbers actually move:
+      - Go-to-market model: Direct sales vs. channel vs. self-serve? Land-and-expand vs. enterprise deals?
+      - Sales cycle: How long? What drives conversion? Who's the buyer (IT, CFO, line of business)?
+      - Customer acquisition: What does it cost to get a new customer? How is marketing spent?
+      - Customer expansion: How do existing customers grow? Upsell/cross-sell mechanics?
+      - Unit economics: Revenue per customer/user, gross margin by product, contribution margin
+      - Pricing model: Per-seat, consumption-based, enterprise license? Annual vs. monthly?
+      - Capacity constraints: What limits growth? Hiring? Infrastructure? Regulatory approval?
+
+      PRIORITIZE:
+      - Business model: How does the company actually make money? Revenue streams, pricing power
+      - Segment breakdown: Which business units drive growth vs. drag? Use tables for segment data
+      - Competitive moat: What defensible advantages exist? (scale, network effects, IP, switching costs)
+        - Market share trends: gaining, losing, or stable?
+        - Pricing power evidence: can they raise prices?
+        - Customer switching costs: quantified if possible
+        - Network effects: real or marketing claims?
+      - Market position: Market share, key competitors, industry dynamics
+      - Customer concentration: Top customers, revenue dependency risks
+      - Recent strategic changes: Acquisitions, divestitures, pivots, new products
+      - Supply chain: Key suppliers, vertical integration, sourcing risks
+
+      DE-PRIORITIZE:
+      - Generic company history and founding story
+      - Mission statements and corporate values
+      - Standard industry background that applies to all competitors
+      - Routine regulatory environment descriptions
+  Item 1A:
+    weight: high
+    max_tokens: 2500
+    description: Risk factors
+    guidance: |-
+      This is the Risk Factors section - but most risks are generic boilerplate.
+
+      PRIORITIZE (company-specific, unusual, or quantified risks):
+      - Risks unique to THIS company (not generic industry risks)
+      - Newly added risks vs. prior filings (signals emerging concerns)
+      - Risks with specific dollar amounts, percentages, or probabilities
+      - Customer/supplier concentration risks with named parties
+      - Regulatory risks specific to their products/markets
+      - Key person dependencies (named executives)
+      - Litigation risks with material exposure
+      - Covenant or liquidity risks
+      - Technology disruption specific to their business model
+
+      DE-PRIORITIZE (generic boilerplate - mention briefly or skip):
+      - FX/currency risk (standard for multinationals)
+      - Interest rate risk (standard)
+      - General cybersecurity risk (unless they've had breaches)
+      - Generic macro/recession risk
+      - "Competition is intense" (unless specific competitive threats named)
+      - Standard pandemic/force majeure language
+      - Generic regulatory risk without specific exposure
+      - Boilerplate IP/patent risk
+
+      FLAG EXPLICITLY: Any risk that mentions specific dollar thresholds, ongoing litigation,
+      regulatory investigations, or material weaknesses.
+  Item 7:
+    weight: high
+    max_tokens: 5000
+    description: MD&A - management discussion
+    guidance: |-
+      This is MD&A - management's own narrative about performance. This is where you find
+      the real story behind the numbers.
+
+      **CRITICAL: FINANCIAL BREAKDOWN TABLES**
+      Revenue and profit breakdowns are ESSENTIAL - preserve or recreate them as markdown tables:
+      - Revenue by segment/business unit (with YoY growth %)
+      - Revenue by geography/region (with YoY growth %)
+      - Revenue by product/service line if disclosed
+      - Gross profit by segment (with margins)
+      - Operating income by segment (with margins)
+      - Any other P&L breakdowns management provides
+
+      These tables explain WHERE growth/decline is coming from - this is more valuable than narrative.
+
+      **QUALITY OF EARNINGS ANALYSIS**
+      Look beyond reported numbers to earnings quality:
+      - Cash flow vs. earnings: Is net income converting to operating cash flow?
+      - Working capital trends: DSO, inventory turns, DPO changes (cash conversion cycle)
+      - Deferred revenue: Growing faster or slower than recognized revenue?
+      - One-time items: Normalize for restructuring, litigation, impairments - what's the real run rate?
+      - Stock-based compensation: Trend as % of revenue (real economic cost often ignored)
+      - Capitalized costs: R&D capitalization, software development costs - aggressive or conservative?
+
+      RED FLAGS to call out:
+      - Net income growing faster than operating cash flow (earnings quality concern)
+      - Rising DSO with flat/slowing revenue (collection issues)
+      - Frequent "one-time" charges every year (not really one-time)
+      - Heavy SBC (>15% of revenue for tech is concerning)
+
+      **COMPARATIVE CONTEXT**
+      Always anchor to prior periods:
+      - What changed from last year? What drove the change?
+      - Sequential trends: Acceleration, deceleration, or stability?
+      - Is this performance in-line with history or an outlier?
+      - Management commentary on guidance vs. actuals
+
+      PRIORITIZE:
+      - YoY and QoQ trends with specific drivers (not just "revenue increased")
+      - Margin analysis: What's driving gross/operating margin changes?
+      - Segment performance: Which units are growing/shrinking and why?
+      - Forward-looking statements: Guidance, outlook, management expectations
+      - Cash flow drivers: Working capital changes, CapEx plans, FCF trajectory
+      - Capital allocation: Buybacks, dividends, M&A commentary
+      - Key operating metrics: Same-store sales, ARR, churn, DAU, etc.
+      - Management's explanation of misses or beats vs. expectations
+
+      EXTRACT KEY METRICS (preserve exact numbers in tables where possible):
+      - Revenue, gross profit, operating income, net income (and YoY %)
+      - Gross margin, operating margin, net margin
+      - Key segment revenues and growth rates
+      - Guidance figures if provided
+      - Any non-GAAP metrics management emphasizes
+
+      DE-PRIORITIZE:
+      - Lengthy accounting policy descriptions
+      - Standard critical accounting estimates boilerplate
+      - Generic economic outlook
+  Item 1B:
+    weight: medium
+    max_tokens: 800
+    description: Unresolved staff comments
+    guidance: |-
+      This section discloses unresolved SEC staff comments - these are potential red flags.
+
+      PRIORITIZE:
+      - ANY unresolved comments (this section is often empty - content here is notable)
+      - Nature of SEC concerns (accounting, disclosure, internal controls)
+      - Timeline and company's response
+      - Whether comments relate to material items
+
+      If empty/no comments: Simply note "No unresolved SEC staff comments" - this is good.
+  Item 2:
+    weight: medium
+    max_tokens: 800
+    description: Properties
+    guidance: |-
+      This is the Properties section - real estate and physical footprint.
+
+      PRIORITIZE:
+      - Manufacturing capacity and utilization (for industrials/manufacturing)
+      - Geographic concentration of operations
+      - Owned vs. leased (and lease expiration risks)
+      - Any planned facility expansions, closures, or consolidations
+      - Data center/cloud infrastructure (for tech companies)
+      - Retail store count and strategy (for retailers)
+
+      DE-PRIORITIZE:
+      - Detailed addresses and square footage (unless capacity-relevant)
+      - Standard lease terms
+      - Routine property maintenance
+  Item 3:
+    weight: medium
+    max_tokens: 800
+    description: Legal proceedings
+    guidance: |-
+      This is Legal Proceedings - material litigation and regulatory matters.
+
+      PRIORITIZE:
+      - Any litigation with quantified potential exposure
+      - Class action lawsuits (especially securities fraud, product liability)
+      - Government/regulatory investigations or enforcement actions
+      - Patent/IP disputes that could affect key products
+      - Environmental liabilities with remediation costs
+      - Employment/discrimination suits at scale
+      - Matters where company has taken reserves or accruals
+
+      DE-PRIORITIZE:
+      - Routine litigation "in the ordinary course of business"
+      - Matters described as immaterial
+      - Generic statement that litigation outcomes are uncertain
+  Item 7A:
+    weight: medium
+    max_tokens: 1000
+    description: Quantitative market risk
+    guidance: |-
+      This is Quantitative and Qualitative Disclosures About Market Risk.
+
+      PRIORITIZE:
+      - Actual quantified exposures (not just "we have FX risk")
+      - Sensitivity analyses: "10% move in X would impact Y by $Z"
+      - Hedging program details and effectiveness
+      - Commodity price exposures for input costs
+      - Interest rate sensitivity on debt portfolio
+      - Counterparty/credit risk concentrations
+
+      DE-PRIORITIZE:
+      - Generic descriptions of risk types without quantification
+      - Standard policy descriptions
+  Item 8:
+    weight: high
+    max_tokens: 2500
+    description: Financial statements
+    guidance: |-
+      This is Financial Statements and Supplementary Data.
+
+      **CRITICAL: SEGMENT & BREAKDOWN DATA**
+      The footnotes contain essential breakdown data - extract as tables:
+      - Segment revenue, operating income, and assets (from segment footnote)
+      - Geographic revenue breakdown
+      - Product/service revenue breakdown if disclosed
+      - Revenue by contract type (subscription vs. license vs. services)
+      - Deferred revenue and remaining performance obligations (RPO)
+
+      PRIORITIZE:
+      - Key metrics from income statement, balance sheet, cash flow
+      - SEGMENT FOOTNOTE: Full segment P&L data with YoY comparisons
+      - Revenue recognition footnote: Breakdown by revenue type, timing
+      - Unusual accounting policies or estimates
+      - Significant changes in accounting methods
+      - Other material footnotes:
+        - Debt schedules and maturities
+        - Lease obligations
+        - Pension/OPEB funded status
+        - Stock-based compensation expense
+        - Goodwill and intangibles (impairment risk)
+      - Auditor's report: Any qualifications, emphasis of matter, or going concern?
+
+      DE-PRIORITIZE:
+      - Standard accounting policy boilerplate
+      - Immaterial footnotes
+      - Detailed rollforwards unless amounts are significant
+  Item 9A:
+    weight: medium
+    max_tokens: 800
+    description: Controls and procedures
+    guidance: |-
+      This is Controls and Procedures - internal controls over financial reporting.
+
+      PRIORITIZE:
+      - ANY material weaknesses (this is a major red flag)
+      - Significant deficiencies
+      - Changes in internal control during the period
+      - Management's assessment of control effectiveness
+      - Auditor's attestation conclusion (for large accelerated filers)
+      - Remediation efforts for any identified weaknesses
+
+      FLAG IMMEDIATELY: Any disclosure of material weakness in internal controls.
+
+      If clean: Simply note "No material weaknesses; controls effective" - this is good.
+  Item 4:
+    weight: low
+    max_tokens: 400
+    description: Mine safety
+    guidance: |-
+      Mine Safety Disclosures - only relevant for mining companies.
+
+      PRIORITIZE: Any citations, orders, violations with penalties, or fatalities.
+      If N/A or clean: Just note "Not applicable" or "No material violations".
+  Item 5:
+    weight: low
+    max_tokens: 600
+    description: Market for stock
+    guidance: |-
+      Market for Registrant's Common Equity and Related Stockholder Matters.
+
+      PRIORITIZE:
+      - Dividend policy and recent changes
+      - Share repurchase programs (authorized amounts, remaining capacity)
+      - Stock performance vs. peers (if 5-year chart included)
+      - Number of shareholders of record (if unusual)
+
+      DE-PRIORITIZE:
+      - Standard trading market information
+      - Transfer agent details
+  Item 6:
+    weight: low
+    max_tokens: 400
+    description: Reserved
+    guidance: This item is reserved/not used. Skip or note "Reserved - no content".
+  Item 9:
+    weight: low
+    max_tokens: 400
+    description: Disagreements with accountants
+    guidance: |-
+      Changes in and Disagreements with Accountants.
+
+      PRIORITIZE: ANY disagreements or auditor changes - this is a red flag worth investigating.
+      If clean: Note "No disagreements with accountants" - this is expected.
+  Item 9B:
+    weight: low
+    max_tokens: 400
+    description: Other information
+    guidance: |-
+      Other Information - catch-all for 8-K items disclosed here instead.
+
+      PRIORITIZE: Any substantive disclosures (these are sometimes important items filed
+      to avoid a standalone 8-K).
+      If empty: Note "No other information disclosed".
+  Item 9C:
+    weight: low
+    max_tokens: 400
+    description: Foreign jurisdictions
+    guidance: |-
+      Disclosure Regarding Foreign Jurisdictions that Prevent Inspections.
+
+      PRIORITIZE: Any disclosure of audit inspection limitations (esp. China-based operations).
+      If N/A: Note "Not applicable".
+  Item 10:
+    weight: low
+    max_tokens: 600
+    description: Directors and officers
+    guidance: |-
+      Directors, Executive Officers, and Corporate Governance.
+
+      PRIORITIZE:
+      - Recent executive departures or appointments (especially CEO/CFO)
+      - Board composition changes
+      - Related party relationships on the board
+      - Any disclosed code of ethics violations
+
+      DE-PRIORITIZE:
+      - Standard biographical information
+      - Routine committee descriptions
+  Item 11:
+    weight: low
+    max_tokens: 600
+    description: Executive compensation
+    guidance: |-
+      Executive Compensation - usually refers to proxy statement.
+
+      PRIORITIZE:
+      - CEO/CFO total compensation (if included here)
+      - Pay vs. performance concerns
+      - Unusual bonus structures or golden parachutes
+      - Stock-based comp expense trends
+
+      Note: Detailed comp is usually in DEF 14A proxy - this may just be a cross-reference.
+  Item 12:
+    weight: low
+    max_tokens: 400
+    description: Security ownership
+    guidance: |-
+      Security Ownership of Certain Beneficial Owners and Management.
+
+      PRIORITIZE:
+      - Insider ownership percentages (alignment with shareholders)
+      - Large institutional holders (>5%)
+      - Recent insider buying or selling patterns
+      - Founder/family ownership stakes
+
+      DE-PRIORITIZE: Standard ownership tables without notable concentrations.
+  Item 13:
+    weight: low
+    max_tokens: 400
+    description: Related transactions
+    guidance: |-
+      Certain Relationships and Related Transactions.
+
+      PRIORITIZE: ANY related party transactions - these deserve scrutiny:
+      - Transactions with executives, directors, or their family members
+      - Deals with companies where insiders have interests
+      - Dollar amounts and terms vs. arm's length
+
+      If none: Note "No related party transactions disclosed" - this is good.
+  Item 14:
+    weight: low
+    max_tokens: 400
+    description: Accountant fees
+    guidance: |-
+      Principal Accountant Fees and Services.
+
+      PRIORITIZE:
+      - Audit fee trends (big increases may signal complexity/issues)
+      - Non-audit fees vs. audit fees (independence concern if non-audit > audit)
+      - Tax and advisory fees
+
+      Usually routine - just note total fees and any unusual ratios.
+  Item 15:
+    weight: low
+    max_tokens: 300
+    description: Exhibits
+    guidance: |-
+      Exhibit and Financial Statement Schedules - just an index.
+      Note: Skip detailed listing. Only flag if unusual exhibits (e.g., material contracts).
+  Item 16:
+    weight: low
+    max_tokens: 300
+    description: Form 10-K summary
+    guidance: |-
+      Form 10-K Summary - optional summary section.
+      If present: Review for any additional context. Usually not filed.
+  Part I, Item 1:
+    weight: high
+    max_tokens: 2000
+    description: 10-Q Financial statements
+    guidance: |-
+      Quarterly Financial Statements (unaudited).
+
+      **CRITICAL: EXTRACT BREAKDOWN TABLES**
+      Create/preserve tables for:
+      - Revenue by segment (current Q vs. prior year Q, with growth %)
+      - Revenue by geography (current Q vs. prior year Q)
+      - Revenue by type (subscription, license, services, etc.)
+      - Operating income by segment if disclosed
+      - Deferred revenue and RPO changes
+
+      PRIORITIZE:
+      - QoQ and YoY changes in key metrics - USE TABLES
+      - Revenue, gross margin, operating income trends
+      - Balance sheet changes (cash, debt, working capital)
+      - Cash flow highlights
+      - Segment footnote data (often has quarterly breakdowns)
+      - Revenue recognition footnote details
+      - Any restatements or corrections
+
+      Focus on CHANGES from prior quarter and prior year quarter - tables make this clearer.
+  Part I, Item 2:
+    weight: high
+    max_tokens: 4500
+    description: 10-Q MD&A
+    guidance: |-
+      Quarterly MD&A - the key section for understanding quarter performance.
+
+      **CRITICAL: FINANCIAL BREAKDOWN TABLES**
+      Revenue and profit breakdowns are ESSENTIAL - preserve or recreate them as markdown tables:
+      - Revenue by segment/business unit (Q vs. prior year Q, with growth %)
+      - Revenue by geography/region (Q vs. prior year Q, with growth %)
+      - Revenue by product/service type if disclosed
+      - Gross profit and margin by segment
+      - Operating income by segment
+      - YTD figures alongside quarterly where available
+
+      These tables explain WHERE growth/decline is coming from - more valuable than narrative.
+
+      **QUALITY OF EARNINGS (Quarterly Focus)**
+      - Cash flow vs. earnings: Operating cash flow tracking net income?
+      - Working capital changes: DSO, inventory, payables shifts this quarter
+      - Deferred revenue trends: Billings strength vs. revenue recognition
+      - One-time items: What adjustments are needed for clean earnings?
+      - SBC as % of revenue: Trend from prior quarters
+
+      **COMPARATIVE CONTEXT (Critical for 10-Q)**
+      The value of a quarterly report is understanding CHANGE:
+      - vs. Prior Year Quarter: What drove YoY delta? Growth acceleration/deceleration?
+      - vs. Prior Quarter (Sequential): Seasonal factors vs. real trend change?
+      - vs. Guidance: Beat, miss, or in-line? Magnitude and driver?
+      - vs. Prior Guidance: Did outlook improve or deteriorate? Why?
+
+      Call out explicitly: "This quarter [metric] improved/declined because [reason]"
+
+      PRIORITIZE:
+      - Results vs. expectations/guidance - quantify the delta
+      - Revenue drivers by segment/geography - USE TABLES
+      - Margin changes and explanations - what moved gross/operating margin?
+      - One-time items vs. recurring trends
+      - Updated guidance or outlook changes
+      - Management commentary on demand/backlog/pipeline
+      - Key operating metrics (ARR, DAU, same-store sales, etc.)
+      - Seasonality factors vs. underlying trend
+
+      EXTRACT KEY METRICS (use tables where possible):
+      - Revenue (total and by segment) with growth rates
+      - Gross margin percentage and drivers
+      - Operating income/margin by segment
+      - EPS (GAAP and non-GAAP)
+      - Updated guidance if provided
+      - Key non-GAAP metrics management emphasizes
+
+      DE-PRIORITIZE:
+      - Repetitive accounting policy descriptions
+      - Boilerplate forward-looking statement disclaimers
+  Part I, Item 3:
+    weight: medium
+    max_tokens: 600
+    description: 10-Q Market risk
+    guidance: |-
+      Quarterly Market Risk disclosures.
+
+      PRIORITIZE:
+      - Changes in risk exposures from prior periods
+      - New hedging activities
+      - Updated sensitivity analyses
+
+      Often states "no material changes" - note that if so.
+  Part I, Item 4:
+    weight: medium
+    max_tokens: 600
+    description: 10-Q Controls
+    guidance: |-
+      Quarterly Controls and Procedures.
+
+      PRIORITIZE:
+      - ANY changes in internal controls during the quarter
+      - Material weaknesses identified
+      - Remediation progress
+
+      FLAG: Any control deficiencies. If clean, note "Controls effective, no changes".
+  Part II, Item 1:
+    weight: medium
+    max_tokens: 600
+    description: 10-Q Legal proceedings
+    guidance: |-
+      Quarterly Legal Proceedings update.
+
+      PRIORITIZE:
+      - New litigation since last filing
+      - Developments in ongoing matters
+      - Settlements or judgments
+      - Changes in accrued liabilities
+
+      If no updates: Note "No material changes to legal proceedings".
+  Part II, Item 1A:
+    weight: high
+    max_tokens: 1500
+    description: 10-Q Risk factors
+    guidance: |-
+      Quarterly Risk Factor updates - FOCUS ON CHANGES.
+
+      PRIORITIZE:
+      - NEW risks added since the 10-K (signals emerging concerns)
+      - Modifications to existing risks (expanded language = increased concern)
+      - Removed risks (may indicate resolved issues)
+      - Risks related to current quarter events
+
+      If no changes: Note "No material changes to risk factors" - this is common.
+
+      This section is most valuable when it DIFFERS from the annual 10-K.
+  Part II, Item 2:
+    weight: low
+    max_tokens: 400
+    description: 10-Q Stock repurchases
+    guidance: |-
+      Quarterly Unregistered Sales and Issuer Purchases.
+
+      PRIORITIZE:
+      - Shares repurchased during quarter ($ and shares)
+      - Remaining authorization
+      - Average price paid
+      - Changes in buyback program
+
+      Standard capital return tracking - note the numbers.
+  Part II, Item 3:
+    weight: low
+    max_tokens: 300
+    description: 10-Q Defaults
+    guidance: |-
+      Defaults Upon Senior Securities.
+
+      PRIORITIZE: ANY disclosure here is a major red flag.
+      If none (typical): Note "No defaults" - this is expected.
+  Part II, Item 4:
+    weight: low
+    max_tokens: 300
+    description: 10-Q Mine safety
+    guidance: |-
+      Mine Safety Disclosures - only relevant for mining companies.
+      If N/A: Note "Not applicable".
+  Part II, Item 5:
+    weight: low
+    max_tokens: 400
+    description: 10-Q Other information
+    guidance: |-
+      Other Information - 8-K items disclosed here.
+
+      PRIORITIZE: Any substantive disclosures not in separate 8-Ks.
+      If none: Note "No other information".
+  Part II, Item 6:
+    weight: low
+    max_tokens: 300
+    description: 10-Q Exhibits
+    guidance: Exhibits - just an index. Skip unless material contracts filed.
+  Proxy Summary:
+    weight: medium
+    max_tokens: 800
+    description: Proxy overview
+    guidance: |-
+      Proxy Summary / Meeting Overview.
+
+      PRIORITIZE:
+      - Voting matters and board recommendations
+      - Meeting date and record date
+      - Key proposals (especially contentious ones)
+      - Say-on-pay vote results from prior year
+
+      This provides context for the rest of the proxy.
+  Voting Matters:
+    weight: medium
+    max_tokens: 800
+    description: Proposals for shareholder vote
+    guidance: |-
+      Proposals for Shareholder Vote.
+
+      PRIORITIZE:
+      - Non-routine proposals (anything beyond director election and auditor ratification)
+      - Shareholder proposals (especially governance-related)
+      - Management proposals for equity plans, charter amendments
+      - Board recommendations and reasoning
+      - Vote thresholds required for passage
+
+      FLAG: Any proposal where board recommends AGAINST, or contentious shareholder proposals.
+  Director Nominees:
+    weight: medium
+    max_tokens: 1000
+    description: Board nominees and composition
+    guidance: |-
+      Director Nominees and Board Composition.
+
+      PRIORITIZE:
+      - New director nominees (who's joining?)
+      - Departing directors (who's leaving and why?)
+      - Board independence (how many truly independent?)
+      - Relevant expertise gaps or additions
+      - Diversity statistics
+      - Director tenure and potential entrenchment concerns
+      - Directors with < 75% approval in prior votes
+      - Interlocking directorships or conflicts
+
+      DE-PRIORITIZE:
+      - Standard biographical details for continuing directors
+      - Routine committee membership lists
+  Executive Compensation:
+    weight: high
+    max_tokens: 2500
+    description: CEO/executive pay details
+    guidance: |-
+      Executive Compensation - often the most important proxy section.
+
+      PRIORITIZE:
+      - CEO total compensation (and YoY change)
+      - CEO pay ratio to median employee
+      - Pay vs. performance alignment
+      - Bonus/incentive metrics and achievement levels
+      - Stock-based compensation structures
+      - Clawback provisions
+      - Change-in-control / golden parachute provisions
+      - Peer group composition (is it reasonable or inflated?)
+      - Any special one-time awards or retention grants
+      - ISS/Glass Lewis recommendations if referenced
+
+      EXTRACT FROM SUMMARY COMPENSATION TABLE:
+      - NEO names and titles
+      - Salary, bonus, stock awards, option awards, non-equity incentive, other, total
+      - Focus on CEO and CFO numbers
+
+      FLAG: Disconnects between pay and performance, unusual perks, excessive severance.
+  Stock Ownership:
+    weight: medium
+    max_tokens: 800
+    description: Insider and institutional ownership
+    guidance: |-
+      Security Ownership of Management and Principal Shareholders.
+
+      PRIORITIZE:
+      - CEO/CFO ownership (skin in the game)
+      - Founder/family ownership stakes
+      - Activist or large institutional positions (>5%)
+      - Director ownership requirements and compliance
+      - Recent insider transactions (Form 4 summary if included)
+      - Pledged shares (risk if stock drops)
+
+      FLAG: Low insider ownership, heavy pledging, or recent insider selling.
+  Related Party Transactions:
+    weight: high
+    max_tokens: 1000
+    description: Related party dealings
+    guidance: |-
+      Related Party Transactions - scrutinize carefully.
+
+      PRIORITIZE:
+      - ANY transactions with executives, directors, or family members
+      - Real estate leases with related parties
+      - Consulting or service agreements with insiders
+      - Transactions with companies where insiders have interests
+      - Dollar amounts and whether terms are arm's length
+      - Aircraft usage and personal benefits
+
+      FLAG: Large related party transactions, especially recurring ones or those
+      that seem above-market.
+  Audit Committee:
+    weight: medium
+    max_tokens: 600
+    description: Audit committee report and fees
+    guidance: |-
+      Audit Committee Report and Auditor Information.
+
+      PRIORITIZE:
+      - Auditor ratification (any dissent or concerns?)
+      - Audit fees vs. non-audit fees ratio
+      - Auditor tenure (very long tenure = independence concern)
+      - Any auditor changes in recent years
+      - Audit committee pre-approval policies
+
+      FLAG: High non-audit fees, auditor changes, or audit committee concerns.
+  Governance:
+    weight: medium
+    max_tokens: 800
+    description: Corporate governance practices
+    guidance: |-
+      Corporate Governance section.
+
+      PRIORITIZE:
+      - Board leadership structure (combined vs. separate Chair/CEO)
+      - Lead independent director role
+      - Shareholder rights (special meeting threshold, written consent)
+      - Anti-takeover provisions (poison pills, classified board)
+      - Director overboarding policies
+      - Stock ownership guidelines
+      - Proxy access provisions
+      - Recent governance changes
+
+      FLAG: Governance weaknesses like combined Chair/CEO without strong lead director,
+      or anti-shareholder provisions.
+  Prepared Remarks:
+    weight: high
+    max_tokens: 3000
+    description: Management's prepared comments
+    guidance: |-
+      Prepared Remarks section of earnings call - management's scripted narrative.
+
+      **CRITICAL: FINANCIAL SUMMARY TABLES**
+      CFO remarks typically contain detailed financials - extract as tables:
+      - Revenue breakdown by segment/product (with YoY growth %)
+      - Revenue by geography if mentioned
+      - Gross margin and operating margin by segment
+      - Key operating metrics (ARR, bookings, etc.) with comparisons
+      - Guidance summary (current quarter, full year)
+
+      PRIORITIZE:
+      - Key performance highlights vs. guidance/expectations
+      - Forward guidance (quarterly and annual) - PUT IN TABLE
+      - Strategic priorities and initiatives
+      - Segment commentary and outlook - USE TABLES for numbers
+      - Capital allocation plans (buybacks, dividends, M&A)
+      - Operational metrics management emphasizes
+      - Tone and confidence level
+      - Any unusual language or hedging
+      - One-time items and adjustments
+
+      EXTRACT KEY METRICS (use tables where possible):
+      - Revenue and growth rate by segment
+      - EPS (GAAP and non-GAAP)
+      - Guidance for next quarter/year
+      - Segment revenues and margins
+      - Operating metrics (ARR, bookings, backlog, etc.)
+
+      Note who is speaking (CEO vs. CFO) - their emphasis areas differ.
+      CFO section is usually more numbers-heavy - preserve that detail.
+  Q&A:
+    weight: high
+    max_tokens: 3000
+    description: Analyst Q&A session
+    guidance: |-
+      Q&A Section of earnings call - often more revealing than prepared remarks.
+
+      ANALYST PARTICIPATION (Required):
+      Start with a brief list of analysts who asked questions:
+      - Name (Firm) - 1-2 word topic summary of their question(s)
+      Example: "Mark Murphy (JPMorgan) - NRR trajectory; Jim Fish (Citi) - Logs pricing"
+
+      This signals what institutional investors care about. Bulge bracket analysts
+      (Goldman, Morgan Stanley, JPMorgan, etc.) often ask questions their buy-side
+      clients want answered.
+
+      PRIORITIZE:
+      - Questions management seemed uncomfortable answering
+      - Requests for clarity that got vague responses
+      - Topics multiple analysts asked about (signals concern)
+      - New information not in prepared remarks
+      - Management's tone shifts during tough questions
+      - Competitive commentary
+      - M&A appetite and pipeline
+      - Pricing and demand commentary
+      - Margin outlook and headwinds/tailwinds
+      - Guidance clarifications
+
+      FLAG:
+      - Questions management deflected or refused to answer
+      - Contradictions with prepared remarks
+      - Defensive responses
+      - "We'll get back to you on that"
+
+      Organize key insights by topic, noting which analyst raised each concern.
+  Operator/Other:
+    weight: low
+    max_tokens: 400
+    description: Operator statements and logistics
+    guidance: |-
+      Operator statements, forward-looking disclaimers, logistics.
+      Usually boilerplate - skip unless there's unusual content like early call termination.
+  Item 1.01:
+    weight: high
+    max_tokens: 1500
+    description: 8-K Entry into material agreement
+    guidance: |-
+      Entry into a Material Definitive Agreement.
+
+      PRIORITIZE:
+      - Nature of the agreement (M&A, credit facility, supply contract, etc.)
+      - Counterparty and their significance
+      - Key terms: value, duration, termination rights
+      - Conditions precedent
+      - Material covenants or restrictions
+      - Expected timeline and closing conditions
+
+      This is often the most important 8-K item - material contracts trigger this.
+  Item 1.02:
+    weight: high
+    max_tokens: 1000
+    description: 8-K Termination of material agreement
+    guidance: |-
+      Termination of a Material Definitive Agreement.
+
+      PRIORITIZE:
+      - What agreement was terminated
+      - Reason for termination (expiration, breach, mutual, etc.)
+      - Financial impact
+      - Replacement arrangements if any
+
+      FLAG: Unexpected terminations of key customer/supplier contracts.
+  Item 2.01:
+    weight: high
+    max_tokens: 1500
+    description: 8-K Completion of acquisition/disposition
+    guidance: |-
+      Completion of Acquisition or Disposition of Assets.
+
+      PRIORITIZE:
+      - Deal value and form of consideration
+      - Assets/business acquired or sold
+      - Strategic rationale
+      - Financing details
+      - Pro forma impact if provided
+      - Key personnel changes
+
+      Major M&A activity - capture all material terms.
+  Item 2.02:
+    weight: high
+    max_tokens: 1200
+    description: 8-K Results of operations
+    guidance: |-
+      Results of Operations and Financial Condition (earnings release).
+
+      PRIORITIZE:
+      - Headline metrics vs. consensus
+      - Revenue, EPS (GAAP and non-GAAP)
+      - Guidance (new or reaffirmed)
+      - Segment performance
+      - Key operating metrics
+      - Management commentary
+
+      This is the earnings release - extract all key numbers.
+  Item 2.05:
+    weight: high
+    max_tokens: 1000
+    description: 8-K Restructuring costs
+    guidance: |-
+      Costs Associated with Exit or Disposal Activities.
+
+      PRIORITIZE:
+      - Nature of restructuring (layoffs, facility closures, etc.)
+      - Total expected costs and timing
+      - Cash vs. non-cash charges
+      - Expected savings and payback period
+      - Headcount reductions
+
+      FLAG: Large restructurings signal business challenges or strategic shifts.
+  Item 2.06:
+    weight: high
+    max_tokens: 1000
+    description: 8-K Material impairment
+    guidance: |-
+      Material Impairments.
+
+      PRIORITIZE:
+      - Asset(s) being impaired (goodwill, intangibles, PP&E, etc.)
+      - Impairment amount
+      - Triggering event or circumstance
+      - Segment affected
+      - Cash vs. non-cash nature
+
+      FLAG: Goodwill impairments suggest overpayment for acquisitions.
+  Item 3.01:
+    weight: medium
+    max_tokens: 600
+    description: 8-K Delisting notice
+    guidance: |-
+      Notice of Delisting or Transfer.
+
+      PRIORITIZE: Any delisting notice is a major red flag.
+      Capture reason and timeline for compliance.
+  Item 4.01:
+    weight: high
+    max_tokens: 800
+    description: 8-K Auditor change
+    guidance: |-
+      Changes in Registrant's Certifying Accountant.
+
+      PRIORITIZE:
+      - Was auditor dismissed or did they resign?
+      - Any disagreements with former auditor
+      - Reportable events (material weaknesses, etc.)
+      - Who is the new auditor?
+
+      FLAG: Auditor resignations or disagreements are red flags.
+  Item 4.02:
+    weight: high
+    max_tokens: 1000
+    description: 8-K Non-reliance on financials
+    guidance: |-
+      Non-Reliance on Previously Issued Financial Statements.
+
+      PRIORITIZE:
+      - Which periods are affected
+      - Nature of the errors
+      - Expected restatement timeline
+      - Material weakness implications
+      - Stock price impact
+
+      FLAG: This is a major red flag - restatements signal accounting problems.
+  Item 5.02:
+    weight: high
+    max_tokens: 1000
+    description: 8-K Executive changes
+    guidance: |-
+      Departure/Appointment of Directors or Officers.
+
+      PRIORITIZE:
+      - Who is departing/joining (especially CEO, CFO, key executives)
+      - Reason for departure (retirement, resignation, termination)
+      - Timing and transition plan
+      - Severance terms
+      - New appointee's background
+
+      FLAG: Sudden CEO/CFO departures without clear succession.
+  Item 7.01:
+    weight: medium
+    max_tokens: 800
+    description: 8-K Regulation FD disclosure
+    guidance: |-
+      Regulation FD Disclosure - voluntary public disclosure.
+
+      PRIORITIZE:
+      - Nature of the disclosure
+      - Why it warranted an 8-K
+      - Any forward-looking information
+      - Investor presentation materials if attached
+
+      Often used for investor day materials or pre-announcements.
+  Item 8.01:
+    weight: medium
+    max_tokens: 800
+    description: 8-K Other events
+    guidance: |-
+      Other Events - catch-all category.
+
+      PRIORITIZE:
+      - Why management chose to file this
+      - Material information disclosed
+      - Could range from litigation updates to business developments
+
+      Review carefully - sometimes important items are buried here.
+  Analyst Summary:
+    weight: high
+    max_tokens: 1500
+    description: Analyst thesis and rating
+    guidance: |-
+      Analyst Report Summary/Investment Thesis section.
+
+      PRIORITIZE:
+      - Rating (Buy/Hold/Sell) and any rating CHANGES
+      - Price target and methodology (DCF, comps, sum-of-parts)
+      - Price target changes and reasoning
+      - Key thesis points - what's the differentiated view?
+      - Bull vs. bear case framing
+      - Timeframe for thesis to play out
+      - Conviction level (is this a top pick or routine coverage?)
+
+      COMPARE TO CONSENSUS:
+      - Where does this analyst differ from Street consensus?
+      - What do they see that others miss?
+      - Are they early or contrarian on something?
+
+      FLAG: Rating changes, significant PT moves, or thesis shifts.
+  Analyst Valuation:
+    weight: high
+    max_tokens: 1200
+    description: Valuation analysis
+    guidance: |-
+      Valuation section of analyst report.
+
+      PRIORITIZE:
+      - Valuation methodology (DCF, P/E, EV/EBITDA, etc.)
+      - Key assumptions driving the valuation:
+        - Revenue growth rates
+        - Margin assumptions
+        - Discount rate / WACC
+        - Terminal value / exit multiple
+      - Comparable companies used and why
+      - Sum-of-parts breakdown if applicable
+      - Sensitivity analysis (what moves the PT most?)
+      - Implied upside/downside from current price
+
+      EXTRACT KEY NUMBERS:
+      - Price target
+      - Key multiples (current and target)
+      - Model assumptions in table form
+
+      FLAG: Aggressive assumptions, methodology changes, or unusual comps.
+  Analyst Estimates:
+    weight: high
+    max_tokens: 1000
+    description: Financial estimates and revisions
+    guidance: |-
+      Financial Estimates section of analyst report.
+
+      PRIORITIZE:
+      - Revenue estimates by year/quarter
+      - EPS estimates (GAAP and non-GAAP)
+      - Estimate CHANGES vs. prior (raises/cuts and magnitude)
+      - Estimates vs. consensus (above/below/in-line)
+      - Key drivers of estimate changes
+      - Margin assumptions
+      - Segment-level estimates if provided
+      - FCF estimates and capital return assumptions
+
+      EXTRACT IN TABLE FORMAT:
+      - Multi-year estimates (Rev, EBITDA, EPS, FCF)
+      - Prior vs. new estimates
+      - Analyst vs. consensus
+
+      FLAG: Significant estimate revisions, especially if contrary to recent guidance.
+  Analyst Catalysts:
+    weight: high
+    max_tokens: 800
+    description: Upcoming catalysts and events
+    guidance: |-
+      Catalysts and Event Timeline section.
+
+      PRIORITIZE:
+      - Near-term catalysts (next 3-6 months)
+      - Specific dates and events to watch
+      - Expected impact direction (positive/negative/uncertain)
+      - Probability-weighted outcomes if discussed
+      - Risks to catalyst thesis
+      - Timeline for thesis to play out
+
+      CATALYSTS TO LOOK FOR:
+      - Earnings releases
+      - Product launches / FDA decisions
+      - M&A activity
+      - Regulatory decisions
+      - Management changes
+      - Capital markets events (debt refinancing, buybacks)
+      - Macro events affecting the company
+
+      FLAG: Imminent catalysts with binary outcomes.
+  Analyst Risks:
+    weight: medium
+    max_tokens: 800
+    description: Risk factors identified by analyst
+    guidance: |-
+      Risk Factors section of analyst report.
+
+      PRIORITIZE:
+      - Risks the analyst emphasizes (vs. boilerplate)
+      - Quantified downside scenarios
+      - What would make the analyst wrong?
+      - Key assumptions that could break the thesis
+      - Company-specific risks (not generic industry)
+      - Near-term vs. structural risks
+
+      NOTE: Analysts often have better insight into real risks than
+      the company's own 10-K boilerplate. Pay attention to what they highlight.
+  Analyst Industry:
+    weight: medium
+    max_tokens: 800
+    description: Industry and competitive analysis
+    guidance: |-
+      Industry/Competitive section of analyst report.
+
+      PRIORITIZE:
+      - Competitive positioning vs. peers
+      - Market share trends
+      - Industry growth outlook
+      - Pricing environment
+      - Structural changes affecting the industry
+      - Relative valuation vs. peers
+      - Where does company have advantage/disadvantage?
+
+      FLAG: Share loss concerns, pricing pressure, or competitive threats.
+  Presentation Strategy:
+    weight: high
+    max_tokens: 2000
+    description: Strategic overview and vision
+    guidance: |-
+      Strategic Overview section of investor presentation.
+
+      PRIORITIZE:
+      - Long-term strategic vision and priorities
+      - Key initiatives and investments
+      - Market opportunity sizing (TAM/SAM/SOM)
+      - Competitive moat claims - are they credible?
+      - Strategic pivots or new directions
+      - M&A strategy and appetite
+      - Geographic expansion plans
+      - New product/service roadmap
+
+      CREDIBILITY CHECK:
+      - Do these claims match what's in SEC filings?
+      - Is management overpromising vs. historical delivery?
+      - Are the market size claims reasonable?
+      - Compare to what competitors claim
+
+      FLAG: New strategic directions, ambitious targets, or claims that seem aggressive.
+  Presentation Financials:
+    weight: high
+    max_tokens: 1500
+    description: Financial targets and guidance
+    guidance: |-
+      Financial Targets section of investor presentation.
+
+      PRIORITIZE:
+      - Long-term financial targets (revenue, margins, EPS growth)
+      - Target timeframes (3-year, 5-year)
+      - Capital allocation framework:
+        - CapEx plans
+        - R&D investment
+        - M&A capacity
+        - Shareholder returns (dividends, buybacks)
+      - Margin expansion drivers
+      - Free cash flow targets
+      - ROIC/ROE targets
+      - Balance sheet goals (leverage targets)
+
+      EXTRACT ALL NUMBERS:
+      - Put targets in table format with timeframes
+      - Note baseline year for growth rates
+      - Compare to historical performance (achievable?)
+
+      FLAG: Targets that seem aggressive vs. history, or vague targets without timeframes.
+  Presentation Segments:
+    weight: high
+    max_tokens: 1500
+    description: Business segment deep-dives
+    guidance: |-
+      Segment/Business Unit presentations.
+
+      PRIORITIZE:
+      - Segment-level financial targets
+      - Growth drivers by segment
+      - Margin profiles and improvement plans
+      - Competitive position in each segment
+      - Investment priorities by segment
+      - Which segments are growth engines vs. cash cows?
+      - Cross-selling or synergy opportunities
+      - Underperforming segments and turnaround plans
+
+      FOR EACH SEGMENT CAPTURE:
+      - Revenue and growth target
+      - Margin and margin expansion target
+      - Key initiatives
+      - Market position
+
+      FLAG: Struggling segments, turnaround bets, or segments with declining targets.
+  Presentation Operations:
+    weight: medium
+    max_tokens: 1000
+    description: Operational initiatives
+    guidance: |-
+      Operational Excellence / Efficiency sections.
+
+      PRIORITIZE:
+      - Cost reduction initiatives and targets
+      - Operational efficiency programs
+      - Supply chain improvements
+      - Technology/digital transformation
+      - Automation and productivity gains
+      - Working capital optimization
+      - Real estate/footprint changes
+      - Headcount plans
+
+      EXTRACT:
+      - Savings targets with timeframes
+      - Investment required to achieve savings
+      - Payback periods
+
+      FLAG: Large restructuring programs or significant operational changes.
+  Presentation ESG:
+    weight: low
+    max_tokens: 600
+    description: ESG and sustainability
+    guidance: |-
+      ESG/Sustainability sections.
+
+      PRIORITIZE:
+      - Material ESG issues for the industry (not generic)
+      - Emissions targets if operationally significant
+      - Regulatory compliance requirements
+      - ESG-linked compensation or financing
+      - Risks from ESG factors (stranded assets, regulation)
+
+      DE-PRIORITIZE:
+      - Generic sustainability marketing
+      - Immaterial ESG initiatives
+      - Standard diversity statistics
+
+      Only highlight ESG items that have financial materiality.
+  Presentation Q&A:
+    weight: high
+    max_tokens: 2000
+    description: Q&A from investor day
+    guidance: |-
+      Q&A Session from investor presentation.
+
+      PRIORITIZE:
+      - Topics that generated multiple questions (signals investor concern)
+      - Questions management deflected or answered vaguely
+      - New information not in prepared remarks
+      - Pushback from analysts on targets or claims
+      - Management's candor and credibility
+      - Specific guidance clarifications
+      - Competitive commentary
+      - M&A and capital allocation questions
+
+      FLAG:
+      - Areas where management seemed defensive
+      - Guidance that differs from prepared materials
+      - Analyst skepticism about targets
+
+      This is often more valuable than the prepared presentation.
+  Conference Overview:
+    weight: high
+    max_tokens: 2000
+    description: Conference presentation overview and key themes
+    guidance: |-
+      Conference presentation (GS, MS, JPM, etc.) or fireside chat transcript.
+
+      These are often more candid than earnings calls - executives speak more freely in
+      conversational settings with a single interviewer.
+
+      PRIORITIZE:
+      - Strategic themes and priorities management emphasizes
+      - Industry/competitive commentary (often more direct than in filings)
+      - Forward-looking statements on growth, margins, M&A
+      - New information not disclosed in recent earnings calls
+      - Management's view on market trends and positioning
+      - Capital allocation philosophy and priorities
+      - Tone and confidence level of management
+
+      WATCH FOR:
+      - Statements that differ from or extend beyond SEC filings
+      - Candid competitive commentary (who they're worried about)
+      - Industry trend observations
+      - Technology or product roadmap hints
+      - Customer/partner commentary
+      - Hiring and investment priorities
+
+      FLAG: New strategic directions, candid competitive admissions, or guidance updates.
+  Conference Q&A:
+    weight: high
+    max_tokens: 2500
+    description: Q&A session from conference
+    guidance: |-
+      Q&A portion of conference presentation or fireside chat.
+
+      The interviewer (often a sell-side analyst covering the company) asks probing
+      questions. Responses are often more detailed and candid than earnings call Q&A.
+
+      PRIORITIZE:
+      - Questions the interviewer pushes back on or asks follow-ups
+      - Topics where management seems to elaborate extensively
+      - Competitive positioning questions and responses
+      - Margin and profitability trajectory discussion
+      - Customer concentration or key account commentary
+      - M&A appetite and deal pipeline hints
+      - Management's biggest concerns or challenges
+      - Anything that contradicts or extends earnings call messaging
+
+      EXTRACT:
+      - Specific metrics or targets mentioned
+      - Timeframes for initiatives
+      - Competitive comparisons
+      - Customer or market segment commentary
+
+      FLAG:
+      - Defensive or evasive responses
+      - New guidance or target mentions
+      - Candid admissions about challenges
+      - Competitive concerns management acknowledges
+  Conference Competitive:
+    weight: high
+    max_tokens: 1000
+    description: Competitive and industry commentary
+    guidance: |-
+      Competitive and industry discussion from conference.
+
+      Conference settings often elicit more direct competitive commentary than formal
+      earnings calls where legal/IR is more cautious.
+
+      PRIORITIZE:
+      - Direct competitor mentions and comparisons
+      - Win/loss commentary and competitive dynamics
+      - Market share discussion
+      - Pricing environment observations
+      - Technology differentiation claims
+      - Customer switching/churn commentary
+      - Industry consolidation views
+      - Barriers to entry discussion
+
+      CRITICAL: Management rarely speaks this candidly about competition in SEC filings.
+      Capture specific competitor mentions and the context.
+
+      FLAG: Direct competitive admissions, market share concerns, or pricing pressure.
+  Misc Document:
+    weight: medium
+    max_tokens: 1000
+    description: Miscellaneous document
+    guidance: |-
+      General guidance for miscellaneous materials.
+
+      PRIORITIZE:
+      - Investment-relevant information
+      - Forward-looking statements
+      - Financial data and metrics
+      - Strategic commentary
+      - Risk factors
+      - Competitive information
+      - Anything that differs from SEC filings
+
+      Approach with appropriate skepticism - this isn't regulated disclosure.
+      Cross-reference claims against official filings when possible.
+
+      FLAG: Material information not disclosed in SEC filings.
+  Presentation Full:
+    weight: high
+    max_tokens: 3000
+    description: Full investor presentation or investor day transcript
+    guidance: |-
+      Complete investor presentation or investor day transcript.
+
+      This is a full document that may include prepared remarks and Q&A. Provide comprehensive
+      coverage since this is the only summary section.
+
+      PRIORITIZE:
+      - Strategic vision and long-term priorities
+      - Financial targets and guidance (with timeframes)
+      - Key growth initiatives and investments
+      - Competitive positioning and differentiation
+      - Market opportunity and TAM claims
+      - Capital allocation philosophy
+      - New product/technology roadmap
+      - Management's key messages and tone
+
+      Q&A HIGHLIGHTS (if included):
+      - Topics that generated follow-up questions
+      - Areas where management elaborated extensively
+      - New information beyond prepared remarks
+      - Analyst pushback or skepticism
+
+      EXTRACT ALL METRICS:
+      - Revenue/ARR targets
+      - Margin targets
+      - Growth rate expectations
+      - Timeframes for initiatives
+
+      FLAG: Aggressive targets, strategic pivots, competitive admissions, guidance changes.
+default:
+  weight: medium
+  max_tokens: 800
+  description: ''
+  guidance: |-
+    Analyze this section for investment-relevant information.
+    Prioritize company-specific insights over generic disclosures.
+    Flag anything unusual or materially important.

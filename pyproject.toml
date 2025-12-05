@@ -1,0 +1,72 @@
+[tool.poetry]
+name = "stock-pitch"
+version = "1.0.0"
+description = "Toolkit for rapid company analysis and stock pitch recommendations"
+authors = ["Jonathan Lipworth <jonathan.lipworth@gmail.com>"]
+readme = "README.md"
+packages = [{include = "src"}]
+
+[tool.poetry.scripts]
+pitch = "src.cli:app"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+
+# Embeddings and vector store (direct usage, no LlamaIndex wrapper)
+sentence-transformers = "^3.3"
+lancedb = "^0.21"
+tantivy = "^0.22"  # Required for LanceDB full-text search
+pylance = "^0.25"  # Required for LanceDB FTS index population
+
+# LLM API
+anthropic = "^0.75"  # Requires 0.75+ for Message Batches API
+
+# Config
+python-dotenv = "^1.0"
+
+# SEC filings
+edgartools = "^3.0"
+
+# Document parsing
+beautifulsoup4 = "^4.12"
+lxml = "^5.3"
+pymupdf = "^1.25"  # PDF page extraction for handwriting conversion
+pyyaml = "^6.0"  # YAML parsing for questions
+
+# CLI
+typer = "^0.15"
+rich = "^13.9"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3"
+ruff = "^0.8"
+mypy = "^1.13"
+pre-commit = "^4.0"
+mdformat = "^0.7"
+mdformat-gfm = "^0.3"  # GitHub-flavored markdown (tables, etc.)
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
+ignore = ["E501"]  # Line length handled by formatter
+
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = false
+warn_unused_ignores = false
+ignore_missing_imports = true
+disable_error_code = ["var-annotated", "no-any-return", "arg-type", "assignment", "import-untyped"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "integration: marks tests as integration tests (require network access)",
+]
+addopts = "-m 'not integration'"

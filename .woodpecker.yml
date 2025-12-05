@@ -1,0 +1,109 @@
+# =============================================================================
+# Woodpecker CI Configuration
+# =============================================================================
+# Documentation: https://woodpecker-ci.org/docs/usage/workflow-syntax
+#
+# This config works in two modes:
+# 1. With custom image (jlipworth/stock-pitch-ci) - fast, deps pre-installed
+# 2. With base image (python:3.12-slim) - slower, installs deps on each run
+#
+# The check-deps step handles both cases automatically.
+# To speed up CI, build and push the custom image:
+#   ./ci/build-image.sh --push
+# =============================================================================
+
+when:
+  - event: pull_request
+  - event: push
+    branch: [main, master, github_master]
+  - event: tag
+
+variables:
+  # Use python:3.12-slim for reliability (works without custom image)
+  # Switch to jlipworth/stock-pitch-ci:latest after pushing the image
+  - &ci_image python:3.12-slim
+
+clone:
+  git:
+    image: woodpeckerci/plugin-git
+    settings:
+      depth: 50
+
+steps:
+  # ===========================================================================
+  # Stage 1: Setup Environment (installs deps if needed)
+  # ===========================================================================
+  - name: setup
+    image: *ci_image
+    commands:
+      - echo "=== Setting up CI environment ==="
+      - chmod +x ./ci/check-deps.sh
+      - ./ci/check-deps.sh
+
+  # ===========================================================================
+  # Stage 2: Parallel Linting and Type Checking
+  # ===========================================================================
+  - name: lint
+    image: *ci_image
+    depends_on: [setup]
+    commands:
+      - echo "=== Running ruff linter ==="
+      - poetry run ruff check src/ tests/ --output-format=github
+      - echo "=== Checking code formatting ==="
+      - poetry run ruff format --check src/ tests/
+
+  - name: typecheck
+    image: *ci_image
+    depends_on: [setup]
+    commands:
+      - echo "=== Running mypy type checker ==="
+      - poetry run mypy src/ --no-error-summary || true
+
+  # ===========================================================================
+  # Stage 3: Unit Tests
+  # ===========================================================================
+  - name: test
+    image: *ci_image
+    depends_on: [lint]
+    commands:
+      - echo "=== Running pytest ==="
+      - poetry run pytest -v --tb=short -m "not integration" --junitxml=test-results.xml
+
+  # ===========================================================================
+  # Stage 4: Integration Tests (optional, requires API key)
+  # ===========================================================================
+  - name: integration
+    image: *ci_image
+    depends_on: [test]
+    environment:
+      ANTHROPIC_API_KEY:
+        from_secret: anthropic_api_key
+    when:
+      - event: push
+        branch: [main, master, github_master]
+    commands:
+      - |
+        if [ -z "$ANTHROPIC_API_KEY" ]; then
+          echo "ANTHROPIC_API_KEY not set, skipping"
+          exit 0
+        fi
+      - poetry run pytest -v --tb=short -m "integration"
+
+# =============================================================================
+# Speeding Up CI
+# =============================================================================
+# The base python:3.12-slim image works but is slower (~2-3 min for deps).
+# To speed up CI:
+#
+# 1. Build the custom image:
+#    ./ci/build-image.sh --push
+#
+# 2. Update the ci_image variable above:
+#    - &ci_image jlipworth/stock-pitch-ci:latest
+#
+# 3. Rebuild the image when pyproject.toml changes
+#
+# =============================================================================
+# Secrets
+# =============================================================================
+# woodpecker-cli secret add --repository <repo> --name anthropic_api_key --value <key>

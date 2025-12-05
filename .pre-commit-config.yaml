@@ -1,0 +1,61 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for available hooks
+#
+# Skip hooks: SKIP=pyright,pytest git commit -m "message"
+# Run manually: pre-commit run --all-files
+
+repos:
+  # General file hygiene hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+      - id: end-of-file-fixer
+        exclude: ^(processed/|index/|notes/)
+      - id: check-yaml
+        args: [--unsafe]
+      - id: check-json
+      - id: check-added-large-files
+        args: [--maxkb=500]
+      - id: check-merge-conflict
+      - id: debug-statements
+      - id: check-case-conflict
+
+  # Python code formatting and linting
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.8.6
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+
+  # Markdown formatting
+  - repo: https://github.com/executablebooks/mdformat
+    rev: 0.7.21
+    hooks:
+      - id: mdformat
+        additional_dependencies:
+          - mdformat-gfm
+        exclude: ^(processed/|notes/)
+
+  # Type checking (can be slow - skip with SKIP=mypy)
+  - repo: local
+    hooks:
+      - id: mypy
+        name: mypy
+        entry: conda run -n financepy_env mypy src/
+        language: system
+        types: [python]
+        pass_filenames: false
+
+  # Tests - runs on push only (skip with SKIP=pytest)
+  - repo: local
+    hooks:
+      - id: pytest
+        name: pytest
+        entry: conda run -n financepy_env pytest -x -q --tb=short
+        language: system
+        types: [python]
+        pass_filenames: false
+        stages: [pre-push]
