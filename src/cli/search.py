@@ -65,6 +65,21 @@ def search(
         ),
     ] = "none",
     max_chars: Annotated[int, typer.Option("--max-chars", help="Max characters per result (0 for unlimited)")] = 500,
+    table: Annotated[
+        bool | None,
+        typer.Option(
+            "--table/--no-table",
+            "-t",
+            help="Filter to only chunks containing tables (--table) or exclude tables (--no-table)",
+        ),
+    ] = None,
+    table_type: Annotated[
+        str | None,
+        typer.Option(
+            "--table-type",
+            help="Filter by table type: financial_statement, compensation, comparison, other (implies --table)",
+        ),
+    ] = None,
 ) -> None:
     """Search indexed documents with hybrid search.
 
@@ -74,6 +89,11 @@ def search(
     - none: Show only the matching chunk (default, 500 chars)
     - section: Show full parent section (deduplicates results from same section)
     - window: Show chunk + 2 neighboring chunks
+
+    Table filtering:
+    - --table: Show only chunks containing tables
+    - --no-table: Exclude chunks containing tables
+    - --table-type TYPE: Filter by specific table type (implies --table)
     """
     ticker = company.upper()
 
@@ -86,6 +106,24 @@ def search(
     if context not in ("none", "section", "window"):
         console.print(f"[red]Invalid context: {context}. Use none, section, or window.[/red]")
         raise typer.Exit(1)
+
+    # Validate table_type if provided
+    valid_table_types = ("financial_statement", "compensation", "comparison", "other")
+    if table_type is not None and table_type not in valid_table_types:
+        console.print(f"[red]Invalid table type: {table_type}. " f"Use one of: {', '.join(valid_table_types)}[/red]")
+        raise typer.Exit(1)
+
+    # Determine content_type filter based on --table flag
+    # --table-type implies --table
+    content_type_filter: str | None = None
+    if table_type is not None:
+        # --table-type implies filtering to tables only
+        content_type_filter = "table"
+    elif table is True:
+        content_type_filter = "table"
+    elif table is False:
+        content_type_filter = "text"
+    # If table is None (default), no content_type filter is applied
 
     try:
         with Progress(
@@ -112,6 +150,8 @@ def search(
                 query=query,
                 filing_type=doc_type,
                 section=section,
+                content_type=content_type_filter,
+                table_type=table_type,
             )
 
             # Apply context expansion if requested
@@ -133,8 +173,16 @@ def search(
     console.print(f"\n[bold]Results for:[/bold] {query}")
     rerank_info = " + rerank" if rerank else ""
     context_info = f" | Context: {context}" if context != "none" else ""
+    # Build table filter info string
+    table_info = ""
+    if table_type:
+        table_info = f" | Table: {table_type}"
+    elif table is True:
+        table_info = " | Tables only"
+    elif table is False:
+        table_info = " | No tables"
     result_count = len(expanded_results) if expanded_results else len(results)
-    console.print(f"[dim]Mode: {mode}{rerank_info}{context_info} | Found: {result_count} results[/dim]\n")
+    console.print(f"[dim]Mode: {mode}{rerank_info}{context_info}{table_info} | Found: {result_count} results[/dim]\n")
 
     if not results:
         console.print("[yellow]No results found.[/yellow]")
