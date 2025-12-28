@@ -21,9 +21,7 @@ when:
     cron: renovate
 
 variables:
-  # Use python:3.12-slim for reliability (works without custom image)
-  # Switch to jlipworth/stock-pitch-ci:latest after pushing the image
-  - &ci_image python:3.12-slim
+  - &ci_image jlipworth/stock-pitch-ci:latest
 
 clone:
   git:
