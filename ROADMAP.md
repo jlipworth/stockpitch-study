@@ -67,3 +67,21 @@ Fine-tune the cross-encoder reranker on domain-specific data.
 - Query result caching for frequently repeated queries
 - Embedding caching to avoid re-computation
 - Index partitioning for large indexes by filing type or date
+
+## CI/CD Improvements
+
+### Re-enable Embedding Tests in CI (Medium Priority)
+
+Currently embedding/reranker tests are marked `@pytest.mark.integration` and skipped in CI because:
+
+- BGE-M3 model is ~2GB download
+- Reranker model is ~1GB download
+- Full PyTorch with CUDA is ~10GB (sentence-transformers pulls it in)
+
+**Goal**: Run embedding tests in CI with CPU-only PyTorch.
+
+**Approach**:
+
+- Configure Poetry to use PyTorch CPU-only index for CI
+- Or pre-download models into CI image (adds ~3GB but enables tests)
+- Remove `@pytest.mark.integration` from embedding tests once working

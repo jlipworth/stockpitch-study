@@ -9,10 +9,20 @@ packages = [{include = "src"}]
 [tool.poetry.scripts]
 pitch = "src.cli:app"
 
+# =============================================================================
+# PyTorch CPU-only source for CI (saves ~8GB vs CUDA version)
+# Usage in CI: pip install torch --index-url https://download.pytorch.org/whl/cpu
+#              poetry install --no-root
+# =============================================================================
+[[tool.poetry.source]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+priority = "explicit"
+
 [tool.poetry.dependencies]
 python = "^3.12"
 
-# Embeddings and vector store (direct usage, no LlamaIndex wrapper)
+# Embeddings and vector store
 sentence-transformers = "^3.3"
 lancedb = "^0.21"
 tantivy = "^0.22"  # Required for LanceDB full-text search
