@@ -11,37 +11,51 @@ Toolkit for rapid company analysis and stock pitch recommendations. Combines SEC
 
 ### For New Users (Fork Workflow)
 
-1. **Fork the template** to create a company-specific repo:
+1. **Clone the template** to create a company-specific repo:
 
    ```bash
-   # Automated setup (recommended)
-   ./scripts/setup_company.sh AAPL              # Creates ../Long/AAPL
-   ./scripts/setup_company.sh AAPL /custom/path # Custom destination
-
-   # Or manual clone
    git clone "/path/to/Case Template" /path/to/AAPL-Case
+   cd /path/to/AAPL-Case
    ```
-
-1. **Configure company context** - Edit `COMPANY.md` with:
-
-   - Ticker symbol and company name
-   - Fiscal calendar (fiscal year end, quarter mapping)
-   - Key metrics for the industry (SaaS, financials, industrials, etc.)
-   - Investment thesis points
 
 1. **Install dependencies**:
 
    ```bash
    conda activate financepy_env
    poetry install
-   cp .env.template .env
-   # Add SEC_USER_AGENT and ANTHROPIC_API_KEY to .env
    ```
 
-1. **Run the pipeline**:
+1. **Run interactive setup** (recommended):
 
    ```bash
-   poetry run pitch process AAPL
+   python scripts/setup_company.py
+   ```
+
+   The setup script will prompt for:
+
+   - Ticker symbol and company name
+   - Position (Long/Short)
+   - SEC user agent email
+   - Fiscal year end
+   - Years of filings to fetch
+   - Key thesis points
+
+   It automatically creates `.env`, `COMPANY.md`, folder structure, and fetches SEC filings.
+
+1. **Add source materials** to appropriate folders:
+
+   - `transcripts/{TICKER}/` - Earnings call transcripts (PDF)
+   - `analyst/{TICKER}/` - Bank analyst reports (PDF)
+   - `conferences/{TICKER}/` - Conference presentations (PDF)
+   - `presentations/{TICKER}/` - Investor day materials (PDF)
+   - `imports/` - Drop ZIP files here for Claude Code to sort
+
+1. **Build index and start research**:
+
+   ```bash
+   poetry run pitch index {TICKER}
+   poetry run pitch inventory
+   poetry run pitch search {TICKER} "revenue growth"
    ```
 
 ### For Contributors
@@ -146,6 +160,30 @@ poetry run pitch ask AAPL "What are the main risk factors?"  # 5. Ask questions
 ```
 
 ## CLI Commands
+
+### Setup New Company
+
+```bash
+# Interactive setup (prompts for all inputs)
+python scripts/setup_company.py
+
+# Pre-specify ticker
+python scripts/setup_company.py AAPL
+
+# Skip SEC filing fetch
+python scripts/setup_company.py --skip-fetch
+
+# Include competitor research instructions
+python scripts/setup_company.py --research
+```
+
+The setup script:
+
+- Creates `.env` with SEC_USER_AGENT
+- Generates `COMPANY.md` with company context
+- Creates folder structure (`transcripts/`, `analyst/`, etc.)
+- Fetches SEC filings (10-K, 10-Q, 8-K, DEF 14A)
+- Prints next steps
 
 ### Full Pipeline (Recommended)
 
