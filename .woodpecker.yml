@@ -17,6 +17,8 @@ when:
   - event: push
     branch: [main, master, github_master]
   - event: tag
+  - event: cron
+    cron: renovate
 
 variables:
   # Use python:3.12-slim for reliability (works without custom image)
@@ -70,25 +72,38 @@ steps:
       - poetry run pytest -v --tb=short -m "not integration" --junitxml=test-results.xml
 
   # ===========================================================================
-  # Stage 4: Integration Tests (optional, requires API key)
+  # Renovate: Dependency Updates (runs on cron schedule)
   # ===========================================================================
-  - name: integration
-    image: *ci_image
-    depends_on: [test]
-    environment:
-      ANTHROPIC_API_KEY:
-        from_secret: anthropic_api_key
+  - name: renovate
+    image: renovate/renovate:latest
     when:
-      - event: push
-        branch: [main, master, github_master]
+      - event: cron
+        cron: renovate
+    environment:
+      RENOVATE_TOKEN:
+        from_secret: github_token
+      LOG_LEVEL: info
     commands:
-      - |
-        if [ -z "$ANTHROPIC_API_KEY" ]; then
-          echo "ANTHROPIC_API_KEY not set, skipping"
-          exit 0
-        fi
-      - poetry run pytest -v --tb=short -m "integration"
+      - renovate --platform github --repositories jlipworth/stockpitch-study
 
+# =============================================================================
+# Secrets Required
+# =============================================================================
+# Add via Woodpecker UI (Repo Settings → Secrets) or CLI:
+#
+#   woodpecker-cli secret add \
+#     --repository jlipworth/stockpitch-study \
+#     --name github_token \
+#     --value "ghp_..."
+#
+# =============================================================================
+# Renovate Cron Setup
+# =============================================================================
+# Create a cron job in Woodpecker (Repo Settings → Cron Jobs):
+#   Name: renovate
+#   Schedule: 0 9 * * 1  (Mondays at 9am, matches renovate.json schedule)
+#   Branch: master
+#
 # =============================================================================
 # Speeding Up CI
 # =============================================================================
@@ -102,8 +117,3 @@ steps:
 #    - &ci_image jlipworth/stock-pitch-ci:latest
 #
 # 3. Rebuild the image when pyproject.toml changes
-#
-# =============================================================================
-# Secrets
-# =============================================================================
-# woodpecker-cli secret add --repository <repo> --name anthropic_api_key --value <key>
