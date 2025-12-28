@@ -56,20 +56,17 @@ COPY pyproject.toml ./
 RUN sha256sum pyproject.toml > /workspace/.deps-hash
 
 # =============================================================================
-# Install CPU-only PyTorch first (saves ~2-3GB per architecture)
-# =============================================================================
-# sentence-transformers pulls in full PyTorch by default (~2.5GB with CUDA)
-# For CI testing (mocked embeddings), CPU-only is sufficient (~500MB)
-RUN pip install --no-cache-dir \
-    torch --index-url https://download.pytorch.org/whl/cpu
-
-# =============================================================================
 # Install dependencies
 # =============================================================================
-# Install without dev dependencies first (smaller layer if only prod changes)
-# Then install with dev dependencies for full test environment
-RUN poetry install --no-root --only main && \
-    poetry install --no-root
+RUN poetry install --no-root
+
+# =============================================================================
+# Replace CUDA PyTorch with CPU-only version (saves ~8GB)
+# =============================================================================
+# sentence-transformers pulls in full PyTorch with CUDA (~10GB)
+# For CI testing (mocked embeddings), CPU-only is sufficient (~2GB)
+RUN pip uninstall -y torch && \
+    pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu
 
 # =============================================================================
 # Verification
