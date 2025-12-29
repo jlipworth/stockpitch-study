@@ -272,7 +272,37 @@ uv run pitch search AAPL "revenue" --limit 5
 
 # Rerank results with cross-encoder for better precision (fetches 50, reranks to top-k)
 uv run pitch search AAPL "net interest margin" --rerank
+
+# Force local model (skip daemon)
+uv run pitch search AAPL "revenue" --no-daemon
+
+# Save results to JSON file instead of printing
+uv run pitch search AAPL "revenue growth" --output results.json
 ```
+
+### Embedding Daemon (Faster Searches)
+
+The embedding daemon keeps BGE-M3 and reranker models loaded in GPU memory,
+eliminating ~30s cold-start latency on searches. See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for architecture details.
+
+```bash
+# Start daemon in foreground (Ctrl+C to stop)
+uv run pitch serve
+
+# Start daemon in background
+uv run pitch serve --background
+
+# Check daemon status
+uv run pitch daemon-status
+
+# Stop daemon
+uv run pitch daemon-stop
+
+# Disable auto-shutdown (default: 15 min idle timeout)
+uv run pitch serve --no-timeout
+```
+
+When the daemon is running, `pitch search` automatically uses it. Use `--no-daemon` to force local model loading.
 
 ### Ask Questions (RAG)
 

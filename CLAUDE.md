@@ -49,6 +49,34 @@ source .venv/bin/activate
 pitch --help
 ```
 
+### Embedding Daemon
+
+For faster searches, start the embedding daemon to keep models loaded in GPU memory:
+
+```bash
+# Start daemon (foreground)
+uv run pitch serve
+
+# Start daemon (background, auto-stops after 15 min idle)
+uv run pitch serve --background
+
+# Check status
+uv run pitch daemon-status
+
+# Stop daemon
+uv run pitch daemon-stop
+```
+
+When running, `pitch search` auto-detects the daemon and uses it for embedding/reranking.
+Use `--no-daemon` to force local model loading.
+
+**Architecture:**
+
+- Unix socket IPC (`.pitch-daemon.sock` in project root)
+- Sequential request queue (prevents GPU OOM)
+- Memory-based batch sizing (adapts to GPU)
+- 15-min idle auto-shutdown (configurable)
+
 ## Core Components
 
 ### 1. SEC Filings Processor

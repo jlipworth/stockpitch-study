@@ -27,6 +27,9 @@ wheels/
 # uv / Python environment
 .venv/
 
+# Daemon socket
+.pitch-daemon.sock
+
 # IDE
 .idea/
 .vscode/

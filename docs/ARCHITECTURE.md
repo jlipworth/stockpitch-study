@@ -152,6 +152,41 @@ flowchart LR
     X3 --> L1 --> L2
 ```
 
+### Embedding Daemon
+
+The daemon keeps BGE-M3 and reranker models loaded in GPU memory, eliminating cold-start latency.
+
+```mermaid
+flowchart LR
+    subgraph Client["CLI Client"]
+        Search[pitch search]
+        Ask[pitch ask]
+    end
+
+    subgraph Socket["Unix Socket IPC"]
+        Sock[.pitch-daemon.sock]
+    end
+
+    subgraph Daemon["Embedding Daemon"]
+        Queue[Request Queue<br/>Sequential Processing]
+        BGE[BGE-M3<br/>Embeddings]
+        Rerank[BGE Reranker<br/>Cross-Encoder]
+        Idle[Idle Timer<br/>15 min auto-stop]
+    end
+
+    Search & Ask --> Sock
+    Sock --> Queue
+    Queue --> BGE --> Rerank
+    Idle -.->|timeout| Daemon
+```
+
+**Key Features:**
+
+- Memory-based batch sizing (adapts to available GPU VRAM)
+- Sequential request queue (prevents OOM)
+- Auto-shutdown after 15 min idle
+- Graceful fallback to local model when daemon unavailable
+
 ### Module Dependency Graph
 
 ```mermaid
@@ -263,6 +298,17 @@ Claude-powered RAG query engine.
 - Configurable context window (default 4000 tokens)
 - Source citation tracking
 - Parent-child section retrieval enabled by default
+
+### Daemon (`src/daemon/`)
+
+Persistent embedding server for fast searches.
+
+- **server.py**: Unix socket server, model loading, request queue
+- **client.py**: Auto-spawn logic, socket communication, fallback handling
+- **protocol.py**: Request/response types, message serialization
+- Memory-based batch sizing (calculates from available GPU VRAM)
+- Sequential request processing to prevent OOM
+- 15-minute idle auto-shutdown (configurable)
 
 ## Design Decisions
 
