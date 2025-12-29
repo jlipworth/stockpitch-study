@@ -62,7 +62,7 @@ For each question to process (respecting --test limit):
 1. Run the search command directly (NO background agents):
 
    ```bash
-   uv run pitch search {TICKER} "query" --doc-type {filter} -k 5
+   uv run pitch search {TICKER} "query" --doc-type {filter} --limit 5
    ```
 
 1. Process results and update file immediately before moving to next question
@@ -102,10 +102,10 @@ ______________________________________________________________________
 
 ```bash
 # With source filter
-uv run pitch search {TICKER} "query" --doc-type {filter} -k 5
+uv run pitch search {TICKER} "query" --doc-type {filter} --limit 5
 
 # Without filter (if sources is empty/all)
-uv run pitch search {TICKER} "query" -k 5
+uv run pitch search {TICKER} "query" --limit 5
 ```
 
 ## Limits

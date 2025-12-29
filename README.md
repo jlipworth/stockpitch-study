@@ -267,8 +267,8 @@ uv run pitch search AAPL "risk factors" --doc-type 10-K
 # Filter by section
 uv run pitch search AAPL "competition" --section "Item 1A"
 
-# Limit results
-uv run pitch search AAPL "revenue" --top-k 5
+# Limit results (--limit, --top-k, or -k all work)
+uv run pitch search AAPL "revenue" --limit 5
 
 # Rerank results with cross-encoder for better precision (fetches 50, reranks to top-k)
 uv run pitch search AAPL "net interest margin" --rerank

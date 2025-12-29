@@ -47,7 +47,7 @@ def _get_fiscal_info(ticker: str) -> str:
 def search(
     company: Annotated[str, typer.Argument(help="Company identifier")],
     query: Annotated[str, typer.Argument(help="Search query")],
-    top_k: Annotated[int, typer.Option("--top-k", "-k", help="Number of results to return")] = 10,
+    top_k: Annotated[int, typer.Option("--top-k", "-k", "--limit", help="Number of results to return")] = 10,
     doc_type: Annotated[
         str | None, typer.Option("--doc-type", "-d", help="Filter by document type (e.g., 10-K)")
     ] = None,
