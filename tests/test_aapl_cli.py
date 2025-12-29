@@ -349,6 +349,7 @@ class TestSearchCommand:
 class TestSummarizeCommand:
     """Tests for the pitch summarize AAPL command."""
 
+    @pytest.mark.integration
     def test_summarize_no_filings(self, temp_project_dirs):
         """Test summarize when no filings exist."""
         with (
@@ -404,6 +405,7 @@ class TestBatchCommands:
             assert result.exit_code == 1
             assert "No data found" in result.stdout or "No manifest" in result.stdout
 
+    @pytest.mark.integration
     def test_batch_status_no_jobs(self, temp_project_dirs):
         """Test batch-status when no jobs exist."""
         with patch("src.cli.batch.PROCESSED_DIR", temp_project_dirs["root"] / "processed"):
