@@ -48,16 +48,41 @@ htmlcov/
 dmypy.json
 
 # Project data directories (large files, per-company)
-data/
-processed/
-index/
-output/
-
-# Keep directory structure with .gitkeep
+# Pattern: ignore contents but keep .gitkeep for folder structure
+data/*
 !data/.gitkeep
+processed/*
 !processed/.gitkeep
+index/*
 !index/.gitkeep
+output/*
 !output/.gitkeep
+
+# Research materials (company-specific contents, keep folder structure)
+transcripts/*
+!transcripts/.gitkeep
+analyst/*
+!analyst/.gitkeep
+presentations/*
+!presentations/.gitkeep
+conferences/*
+!conferences/.gitkeep
+misc/*
+!misc/.gitkeep
+
+# Analysis notes and models
+research/*
+!research/.gitkeep
+questions/*
+!questions/.gitkeep
+model/*
+!model/.gitkeep
+notes/*
+!notes/.gitkeep
+
+# Import staging
+imports/*
+!imports/.gitkeep
 
 # OS
 .DS_Store
@@ -65,6 +90,7 @@ Thumbs.db
 
 # Logs
 *.log
+*.jsonl
 
 # Generated files
 MATERIALS.md

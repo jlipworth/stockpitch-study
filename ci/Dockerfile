@@ -63,7 +63,7 @@ RUN sha256sum pyproject.toml > /workspace/.deps-hash
 # 3. Install CPU-only torch first
 # 4. pip install remaining deps
 # Result: ~2GB image, not 10GB
-RUN poetry export -f requirements.txt -o requirements.txt --without-hashes && \
+RUN poetry export -f requirements.txt -o requirements.txt --without-hashes --with dev && \
     grep -v -E "^(torch|nvidia-|triton)" requirements.txt > requirements-cpu.txt && \
     pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu && \
     pip install --no-cache-dir -r requirements-cpu.txt && \
