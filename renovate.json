@@ -3,7 +3,11 @@
   "extends": [
     "config:recommended"
   ],
+  "onboarding": false,
   "minimumReleaseAge": "3 days",
+  "poetry": {
+    "enabled": true
+  },
   "pre-commit": {
     "enabled": true
   },
@@ -42,5 +46,5 @@
   "prConcurrentLimit": 5,
   "labels": ["dependencies"],
   "commitMessagePrefix": "chore(deps):",
-  "schedule": ["before 9am on Monday"]
+  "schedule": ["after 9am on Monday"]
 }

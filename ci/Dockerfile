@@ -34,8 +34,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # =============================================================================
 ENV POETRY_VERSION=1.8.2
 ENV POETRY_HOME=/opt/poetry
-ENV POETRY_VIRTUALENVS_CREATE=true
-ENV POETRY_VIRTUALENVS_IN_PROJECT=true
+ENV POETRY_VIRTUALENVS_CREATE=false
 ENV POETRY_NO_INTERACTION=1
 ENV PATH="$POETRY_HOME/bin:$PATH"
 
@@ -56,29 +55,28 @@ COPY pyproject.toml ./
 RUN sha256sum pyproject.toml > /workspace/.deps-hash
 
 # =============================================================================
-# Install CPU-only PyTorch first (saves ~2-3GB per architecture)
+# Install dependencies with CPU-only PyTorch
 # =============================================================================
-# sentence-transformers pulls in full PyTorch by default (~2.5GB with CUDA)
-# For CI testing (mocked embeddings), CPU-only is sufficient (~500MB)
-RUN pip install --no-cache-dir \
-    torch --index-url https://download.pytorch.org/whl/cpu
-
-# =============================================================================
-# Install dependencies
-# =============================================================================
-# Install without dev dependencies first (smaller layer if only prod changes)
-# Then install with dev dependencies for full test environment
-RUN poetry install --no-root --only main && \
-    poetry install --no-root
+# Strategy: Export requirements from Poetry, filter CUDA deps, install with pip
+# 1. Export requirements.txt from pyproject.toml
+# 2. Filter out torch and nvidia-* packages (we'll install CPU torch separately)
+# 3. Install CPU-only torch first
+# 4. pip install remaining deps
+# Result: ~2GB image, not 10GB
+RUN poetry export -f requirements.txt -o requirements.txt --without-hashes && \
+    grep -v -E "^(torch|nvidia-|triton)" requirements.txt > requirements-cpu.txt && \
+    pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu && \
+    pip install --no-cache-dir -r requirements-cpu.txt && \
+    rm requirements.txt requirements-cpu.txt
 
 # =============================================================================
 # Verification
 # =============================================================================
-RUN poetry run python --version && \
-    poetry run pip list | head -20
+RUN python --version && \
+    python -c "import torch; print(f'PyTorch {torch.__version__}, CUDA available: {torch.cuda.is_available()}')" && \
+    pip list | grep -i torch
 
 # =============================================================================
 # Entry point
 # =============================================================================
-# Default command shows installed packages
-CMD ["poetry", "run", "python", "--version"]
+CMD ["python", "--version"]

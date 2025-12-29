@@ -71,8 +71,9 @@ class TestBatchSizeDefaults:
         assert model.batch_size == 64
 
 
+@pytest.mark.integration
 class TestEmbeddingModel:
-    """Tests for EmbeddingModel class."""
+    """Tests for EmbeddingModel class (requires BGE-M3 model download)."""
 
     @pytest.fixture(scope="class")
     def model(self):
@@ -160,8 +161,9 @@ class TestEmbeddingModel:
         assert similarity > 0.99  # Should be identical
 
 
+@pytest.mark.integration
 class TestEmbedChunks:
-    """Tests for embedding Chunk objects."""
+    """Tests for embedding Chunk objects (requires BGE-M3 model download)."""
 
     @pytest.fixture(scope="class")
     def model(self):
@@ -283,8 +285,9 @@ class TestCosineSimilarity:
         assert 0 < similarities[2] < 1  # Partial similarity
 
 
+@pytest.mark.integration
 class TestSemanticSimilarity:
-    """Tests for semantic similarity of embeddings."""
+    """Tests for semantic similarity of embeddings (requires BGE-M3 model download)."""
 
     @pytest.fixture(scope="class")
     def model(self):
@@ -381,8 +384,9 @@ class TestRerankResult:
         assert result.original_rank == 0
 
 
+@pytest.mark.integration
 class TestReranker:
-    """Tests for Reranker class."""
+    """Tests for Reranker class (requires reranker model download)."""
 
     @pytest.fixture(scope="class")
     def reranker(self):

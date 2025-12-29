@@ -23,9 +23,9 @@ flowchart TB
     end
 
     subgraph Storage["Storage Layer"]
-        Files[(Filing Store<br/>data/{ticker}/)]
-        Lance[(LanceDB<br/>index/{ticker}/)]
-        Summaries[(Summaries<br/>processed/{ticker}/)]
+        Files[(Filing Store<br/>data/TICKER/)]
+        Lance[(LanceDB<br/>index/TICKER/)]
+        Summaries[(Summaries<br/>processed/TICKER/)]
     end
 
     subgraph Search["Search & Retrieval"]
