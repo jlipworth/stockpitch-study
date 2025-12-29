@@ -77,7 +77,7 @@ WRONG:
 Read the ticker from COMPANY.md, then run from the project root:
 
 ```bash
-poetry run pitch search {TICKER} "your query here" -k 5
+uv run pitch search {TICKER} "your query here" -k 5
 ```
 
 **Always start broad. Only add `--doc-type` filter if:**

@@ -7,8 +7,7 @@ Thank you for your interest in contributing! This document provides guidelines f
 ### Prerequisites
 
 - Python 3.12
-- Conda (for environment management)
-- Poetry (for dependency management)
+- [uv](https://docs.astral.sh/uv/) (for dependency management)
 - Git
 
 ### Environment Setup
@@ -18,17 +17,12 @@ Thank you for your interest in contributing! This document provides guidelines f
 git clone https://github.com/jlipworth/stock-pitch-template.git
 cd stock-pitch-template
 
-# Create and activate conda environment
-conda create -n financepy_env python=3.12
-conda activate financepy_env
-
-# Install dependencies (Poetry uses conda's Python, no virtualenv)
-poetry config virtualenvs.create false
-poetry install
+# Install dependencies (creates .venv automatically)
+uv sync
 
 # Install pre-commit hooks
-pre-commit install
-pre-commit install --hook-type pre-push
+uv run pre-commit install
+uv run pre-commit install --hook-type pre-push
 
 # Copy environment template
 cp .env.template .env

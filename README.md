@@ -21,8 +21,7 @@ Toolkit for rapid company analysis and stock pitch recommendations. Combines SEC
 1. **Install dependencies**:
 
    ```bash
-   conda activate financepy_env
-   poetry install
+   uv sync
    ```
 
 1. **Run interactive setup** (recommended):
@@ -53,9 +52,9 @@ Toolkit for rapid company analysis and stock pitch recommendations. Combines SEC
 1. **Build index and start research**:
 
    ```bash
-   poetry run pitch index {TICKER}
-   poetry run pitch inventory
-   poetry run pitch search {TICKER} "revenue growth"
+   uv run pitch index {TICKER}
+   uv run pitch inventory
+   uv run pitch search {TICKER} "revenue growth"
    ```
 
 ### For Contributors
@@ -77,18 +76,24 @@ See [Contributing](#contributing) for PR guidelines. Company-specific data is gi
 ## Setup
 
 ```bash
-# Activate conda environment
-conda activate financepy_env
+# Install dependencies (creates .venv automatically)
+uv sync
 
-# Install dependencies
-poetry install
+# Run interactive setup (creates .env, COMPANY.md, fetches filings)
+uv run python scripts/setup_company.py
+```
 
-# Configure environment
+<details>
+<summary><strong>Manual Setup (without script)</strong></summary>
+
+```bash
 cp .env.template .env
 # Edit .env to add:
 #   SEC_USER_AGENT="Your Name your@email.com"
 #   ANTHROPIC_API_KEY="your-api-key"
 ```
+
+</details>
 
 ### Troubleshooting
 
@@ -97,25 +102,25 @@ cp .env.template .env
 
 ```bash
 # Check if PyTorch sees your GPU
-python -c "import torch; print(torch.cuda.is_available())"
+uv run python -c "import torch; print(torch.cuda.is_available())"
 
 # If False, reinstall PyTorch with CUDA support
-pip install torch --index-url https://download.pytorch.org/whl/cu121
+uv pip install torch --index-url https://download.pytorch.org/whl/cu121
 ```
 
 </details>
 
 <details>
-<summary><strong>Conda Environment Issues</strong></summary>
+<summary><strong>Environment Issues</strong></summary>
 
 ```bash
-# Create fresh environment if needed
-conda create -n financepy_env python=3.12
-conda activate financepy_env
+# Delete .venv and recreate from scratch
+rm -rf .venv
+uv sync
 
-# Ensure Poetry uses conda's Python (not virtualenv)
-poetry config virtualenvs.create false
-poetry install
+# If Python version is wrong, pin it
+uv python pin 3.12
+uv sync
 ```
 
 </details>
@@ -149,14 +154,14 @@ If you hit rate limits, the fetcher automatically retries with backoff.
 
 ```bash
 # One-command pipeline: fetch, index, and summarize
-poetry run pitch process AAPL
+uv run pitch process AAPL
 
 # Or step by step:
-poetry run pitch fetch AAPL -t "10-K" -y 2     # 1. Fetch SEC filings
-poetry run pitch index AAPL                     # 2. Build vector index
-poetry run pitch summarize AAPL --latest        # 3. Generate summaries
-poetry run pitch search AAPL "revenue growth"   # 4. Search documents
-poetry run pitch ask AAPL "What are the main risk factors?"  # 5. Ask questions
+uv run pitch fetch AAPL -t "10-K" -y 2     # 1. Fetch SEC filings
+uv run pitch index AAPL                     # 2. Build vector index
+uv run pitch summarize AAPL --latest        # 3. Generate summaries
+uv run pitch search AAPL "revenue growth"   # 4. Search documents
+uv run pitch ask AAPL "What are the main risk factors?"  # 5. Ask questions
 ```
 
 ## CLI Commands
@@ -189,50 +194,50 @@ The setup script:
 
 ```bash
 # Run complete pipeline: fetch → index → summarize
-poetry run pitch process AAPL
+uv run pitch process AAPL
 
 # Customize filing types and years
-poetry run pitch process MSFT -t "10-K" -y 3
+uv run pitch process MSFT -t "10-K" -y 3
 
 # Skip summarization (faster, no API costs)
-poetry run pitch process NVDA --skip-summarize
+uv run pitch process NVDA --skip-summarize
 ```
 
 ### Fetch SEC Filings
 
 ```bash
 # Fetch 10-K and 10-Q for last 3 years
-poetry run pitch fetch AAPL -t "10-K,10-Q" -y 3
+uv run pitch fetch AAPL -t "10-K,10-Q" -y 3
 
 # Fetch all filing types with date range
-poetry run pitch fetch AAPL --all --start-date 2022-01-01 --end-date 2024-12-31
+uv run pitch fetch AAPL --all --start-date 2022-01-01 --end-date 2024-12-31
 
 # Fetch specific filing types
-poetry run pitch fetch AAPL -t "10-K,8-K,DEF 14A" -y 2
+uv run pitch fetch AAPL -t "10-K,8-K,DEF 14A" -y 2
 
 # Incremental fetch - only new filings since last fetch
-poetry run pitch fetch AAPL --since
+uv run pitch fetch AAPL --since
 ```
 
 ### Build Vector Index
 
 ```bash
 # Build index for all sources (default: SEC + transcripts + analyst + presentations + conferences + misc)
-poetry run pitch index AAPL
+uv run pitch index AAPL
 
 # Index only specific source types
-poetry run pitch index AAPL --source sec           # SEC filings only
-poetry run pitch index AAPL --source transcripts   # Earnings call PDFs only
-poetry run pitch index AAPL --source analyst       # Bank research reports only
-poetry run pitch index AAPL --source presentations # Investor day materials only
-poetry run pitch index AAPL --source conferences   # Conference transcripts only
-poetry run pitch index AAPL --source misc          # Other materials only
+uv run pitch index AAPL --source sec           # SEC filings only
+uv run pitch index AAPL --source transcripts   # Earnings call PDFs only
+uv run pitch index AAPL --source analyst       # Bank research reports only
+uv run pitch index AAPL --source presentations # Investor day materials only
+uv run pitch index AAPL --source conferences   # Conference transcripts only
+uv run pitch index AAPL --source misc          # Other materials only
 
 # Force rebuild entire index
-poetry run pitch index AAPL --rebuild
+uv run pitch index AAPL --rebuild
 
 # Override embedding batch size (auto-calculated based on GPU memory)
-poetry run pitch index AAPL --batch-size 64
+uv run pitch index AAPL --batch-size 64
 ```
 
 **Source directories:** Place files in the appropriate folder before indexing:
@@ -248,61 +253,61 @@ poetry run pitch index AAPL --batch-size 64
 
 ```bash
 # Hybrid search (default - combines semantic + keyword)
-poetry run pitch search AAPL "revenue growth"
+uv run pitch search AAPL "revenue growth"
 
 # Full-text search only
-poetry run pitch search AAPL "iPhone sales" --mode fts
+uv run pitch search AAPL "iPhone sales" --mode fts
 
 # Vector similarity search
-poetry run pitch search AAPL "competitive landscape" --mode vector
+uv run pitch search AAPL "competitive landscape" --mode vector
 
 # Filter by filing type
-poetry run pitch search AAPL "risk factors" --doc-type 10-K
+uv run pitch search AAPL "risk factors" --doc-type 10-K
 
 # Filter by section
-poetry run pitch search AAPL "competition" --section "Item 1A"
+uv run pitch search AAPL "competition" --section "Item 1A"
 
 # Limit results
-poetry run pitch search AAPL "revenue" --top-k 5
+uv run pitch search AAPL "revenue" --top-k 5
 
 # Rerank results with cross-encoder for better precision (fetches 50, reranks to top-k)
-poetry run pitch search AAPL "net interest margin" --rerank
+uv run pitch search AAPL "net interest margin" --rerank
 ```
 
 ### Ask Questions (RAG)
 
 ```bash
 # Ask a question (uses Claude for answer generation)
-poetry run pitch ask AAPL "What are the main risk factors?"
+uv run pitch ask AAPL "What are the main risk factors?"
 
 # Filter to specific filing type
-poetry run pitch ask AAPL "How did services revenue perform?" --doc-type 10-K
+uv run pitch ask AAPL "How did services revenue perform?" --doc-type 10-K
 
 # Hide source citations
-poetry run pitch ask AAPL "What is the company's strategy?" --no-sources
+uv run pitch ask AAPL "What is the company's strategy?" --no-sources
 
 # Rerank context for higher precision retrieval
-poetry run pitch ask AAPL "What is the company's NIM trend?" --rerank
+uv run pitch ask AAPL "What is the company's NIM trend?" --rerank
 ```
 
 ### Summarize Documents
 
 ```bash
 # Summarize SEC filings (default)
-poetry run pitch summarize AAPL --latest
+uv run pitch summarize AAPL --latest
 
 # Summarize specific source types
-poetry run pitch summarize AAPL --source transcripts      # Earnings calls
-poetry run pitch summarize AAPL --source analyst          # Bank research
-poetry run pitch summarize AAPL --source presentations    # Investor day
-poetry run pitch summarize AAPL --source conferences      # Conference transcripts
-poetry run pitch summarize AAPL --source all              # Everything
+uv run pitch summarize AAPL --source transcripts      # Earnings calls
+uv run pitch summarize AAPL --source analyst          # Bank research
+uv run pitch summarize AAPL --source presentations    # Investor day
+uv run pitch summarize AAPL --source conferences      # Conference transcripts
+uv run pitch summarize AAPL --source all              # Everything
 
 # Filter by document type within SEC filings
-poetry run pitch summarize AAPL --doc-type 10-K --latest
+uv run pitch summarize AAPL --doc-type 10-K --latest
 
 # Summarize a specific file directly
-poetry run pitch summarize AAPL --file transcripts/AAPL/q3_call.pdf
+uv run pitch summarize AAPL --file transcripts/AAPL/q3_call.pdf
 ```
 
 **Performance:** Summarization runs 5 concurrent API calls by default for faster processing. Very long sections (>80k chars) are automatically split into chunks and combined.
@@ -331,29 +336,29 @@ For large jobs, use batch processing which runs asynchronously with 50% cost sav
 
 ```bash
 # Submit SEC filings for batch summarization
-poetry run pitch batch-submit AAPL -d 10-K
-poetry run pitch batch-submit AAPL -d 10-Q --date 2025-08-06
+uv run pitch batch-submit AAPL -d 10-K
+uv run pitch batch-submit AAPL -d 10-Q --date 2025-08-06
 
 # Submit transcripts, presentations, conferences via --file
-poetry run pitch batch-submit AAPL -d transcript --file transcripts/AAPL/q4_call.pdf
-poetry run pitch batch-submit AAPL -d presentation --file presentations/AAPL/investor_day.pdf
-poetry run pitch batch-submit AAPL -d conference --file conferences/AAPL/gs_conference.pdf
+uv run pitch batch-submit AAPL -d transcript --file transcripts/AAPL/q4_call.pdf
+uv run pitch batch-submit AAPL -d presentation --file presentations/AAPL/investor_day.pdf
+uv run pitch batch-submit AAPL -d conference --file conferences/AAPL/gs_conference.pdf
 
 # Check status of all batch jobs
-poetry run pitch batch-status
+uv run pitch batch-status
 
 # Check status of specific job
-poetry run pitch batch-status msgbatch_xxx
+uv run pitch batch-status msgbatch_xxx
 
 # Poll until complete
-poetry run pitch batch-status msgbatch_xxx --poll
+uv run pitch batch-status msgbatch_xxx --poll
 
 # Retrieve results when complete
-poetry run pitch batch-results msgbatch_xxx
+uv run pitch batch-results msgbatch_xxx
 
 # Resubmit truncated sections with higher token limits
-poetry run pitch batch-resubmit msgbatch_xxx           # 1.5x tokens (default)
-poetry run pitch batch-resubmit msgbatch_xxx -m 2.0    # 2x tokens
+uv run pitch batch-resubmit msgbatch_xxx           # 1.5x tokens (default)
+uv run pitch batch-resubmit msgbatch_xxx -m 2.0    # 2x tokens
 ```
 
 **Supported batch document types:** `10-K`, `10-Q`, `8-K`, `DEF 14A`, `transcript`, `presentation`, `conference`, `analyst`
@@ -370,29 +375,29 @@ poetry run pitch batch-resubmit msgbatch_xxx -m 2.0    # 2x tokens
 
 ```bash
 # Convert PDF of handwritten notes to markdown
-poetry run pitch notes my_notes.pdf
+uv run pitch notes my_notes.pdf
 
 # Specify output path
-poetry run pitch notes my_notes.pdf --output transcribed.md
+uv run pitch notes my_notes.pdf --output transcribed.md
 
 # Higher quality (slower)
-poetry run pitch notes my_notes.pdf --dpi 300
+uv run pitch notes my_notes.pdf --dpi 300
 ```
 
 ### Format Markdown (Line Wrapping)
 
 ```bash
 # Wrap long lines in a markdown file for readability (100 char default)
-poetry run pitch wrap processed/AAPL/10-K_2025-05-22_summary.md
+uv run pitch wrap processed/AAPL/10-K_2025-05-22_summary.md
 
 # Preview changes without writing
-poetry run pitch wrap summary.md --preview
+uv run pitch wrap summary.md --preview
 
 # Custom line width
-poetry run pitch wrap summary.md --width 80
+uv run pitch wrap summary.md --width 80
 
 # Output to different file
-poetry run pitch wrap summary.md --output summary_wrapped.md
+uv run pitch wrap summary.md --output summary_wrapped.md
 ```
 
 Preserves headers, tables, code blocks, and bullet point indentation. Useful for reading summaries on narrow displays or tablets.
@@ -403,13 +408,13 @@ Generate a quick reference of all materials in the project:
 
 ```bash
 # For template repo (specify ticker)
-poetry run pitch inventory AAPL
+uv run pitch inventory AAPL
 
 # For forked company repo (auto-detects)
-poetry run pitch inventory
+uv run pitch inventory
 
 # Custom output path
-poetry run pitch inventory -o docs/materials.md
+uv run pitch inventory -o docs/materials.md
 ```
 
 Creates a `MATERIALS.md` with tables listing:
@@ -474,7 +479,7 @@ See [CLAUDE.md](CLAUDE.md) for fork workflow and industry customization guidance
 1. **Fork** the template repository
 1. **Create a branch** for your changes
 1. **Make changes** - company-specific data is gitignored automatically
-1. **Run pre-commit**: `poetry run pre-commit run --all-files`
+1. **Run pre-commit**: `uv run pre-commit run --all-files`
 1. **Run tests**: `pytest -v`
 1. **Submit PR** - only code changes will be included
 
@@ -496,7 +501,7 @@ pytest tests/test_store.py   # Run specific test file
 
 ## Tech Stack
 
-- **Python 3.12** with Poetry for dependencies
+- **Python 3.12** with uv for dependencies
 - **LanceDB** for vector storage with hybrid search
 - **BGE-M3** for embeddings (1024 dimensions, 8192 token context)
 - **Claude Sonnet 4.5** for RAG answers, summarization, and vision

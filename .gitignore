@@ -24,8 +24,7 @@ wheels/
 .installed.cfg
 *.egg
 
-# Poetry
-poetry.lock
+# uv / Python environment
 .venv/
 
 # IDE

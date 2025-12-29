@@ -3,8 +3,8 @@
 # Ensure all dependencies are available for CI, with multiple fallback layers:
 #
 # 1. If custom image has fresh deps → use them (fastest)
-# 2. If custom image has stale deps → run poetry install (medium)
-# 3. If poetry not installed → install poetry + deps (slowest, full fallback)
+# 2. If custom image has stale deps → run uv sync (medium)
+# 3. If uv not installed → install uv + deps (slowest, full fallback)
 #
 # This ensures CI always works, even if:
 # - The custom image hasn't been pushed yet
@@ -16,12 +16,13 @@ set -e
 echo "=== Checking CI environment ==="
 
 # ---------------------------------------------------------------------------
-# Step 1: Check if Poetry is available
+# Step 1: Check if uv is available
 # ---------------------------------------------------------------------------
-if ! command -v poetry &> /dev/null; then
-    echo "⚠️  Poetry not found - installing..."
-    pip install --quiet poetry
-    echo "✓ Poetry installed"
+if ! command -v uv &> /dev/null; then
+    echo "⚠️  uv not found - installing..."
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+    export PATH="$HOME/.local/bin:$PATH"
+    echo "✓ uv installed"
 fi
 
 # ---------------------------------------------------------------------------
@@ -53,12 +54,8 @@ else
     echo "   Installing dependencies now (this will be slower)..."
     echo ""
 
-    # Configure poetry for CI
-    poetry config virtualenvs.create true
-    poetry config virtualenvs.in-project true
-
-    # Install dependencies
-    poetry install --no-root --no-interaction
+    # Install dependencies with uv
+    uv sync --frozen
 
     echo ""
     echo "✓ Dependencies installed successfully"

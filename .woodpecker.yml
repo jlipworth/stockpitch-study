@@ -21,7 +21,7 @@ when:
     cron: renovate
 
 variables:
-  # Pre-built image with Poetry and dependencies installed
+  # Pre-built image with uv and dependencies installed
   # Rebuild when pyproject.toml changes: ./ci/build-image.sh --push
   - &ci_image jlipworth/stock-pitch-ci:latest
 
@@ -50,16 +50,16 @@ steps:
     depends_on: [setup]
     commands:
       - echo "=== Running ruff linter ==="
-      - poetry run ruff check src/ tests/ --output-format=github
+      - uv run ruff check src/ tests/ --output-format=github
       - echo "=== Checking code formatting ==="
-      - poetry run ruff format --check src/ tests/
+      - uv run ruff format --check src/ tests/
 
   - name: typecheck
     image: *ci_image
     depends_on: [setup]
     commands:
       - echo "=== Running mypy type checker ==="
-      - poetry run mypy src/ --no-error-summary || true
+      - uv run mypy src/ --no-error-summary || true
 
   # ===========================================================================
   # Stage 3: Unit Tests
@@ -69,7 +69,7 @@ steps:
     depends_on: [lint]
     commands:
       - echo "=== Running pytest ==="
-      - poetry run pytest -v --tb=short -m "not integration" --junitxml=test-results.xml
+      - uv run pytest -v --tb=short -m "not integration" --junitxml=test-results.xml
 
   # ===========================================================================
   # Renovate: Dependency Updates (runs on cron schedule)

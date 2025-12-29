@@ -77,12 +77,12 @@ echo "  # Edit COMPANY.md with company-specific details"
 echo "  # Edit .env with API keys if needed"
 echo
 echo "  # Fetch SEC filings"
-echo "  poetry run pitch fetch $TICKER_UPPER -t 10-K -y 3"
-echo "  poetry run pitch fetch $TICKER_UPPER -t 10-Q -y 2"
+echo "  uv run pitch fetch $TICKER_UPPER -t 10-K -y 3"
+echo "  uv run pitch fetch $TICKER_UPPER -t 10-Q -y 2"
 echo
 echo "  # Build index and summarize"
-echo "  poetry run pitch index $TICKER_UPPER --source all"
-echo "  poetry run pitch summarize $TICKER_UPPER --latest"
+echo "  uv run pitch index $TICKER_UPPER --source all"
+echo "  uv run pitch summarize $TICKER_UPPER --latest"
 echo
 echo "  # Commit initial setup"
 echo "  git add . && git commit -m \"Initial $TICKER_UPPER setup\""

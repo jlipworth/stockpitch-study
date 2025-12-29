@@ -62,8 +62,7 @@ For each question to process (respecting --test limit):
 1. Run the search command directly (NO background agents):
 
    ```bash
-   source ~/miniconda3/etc/profile.d/conda.sh && conda activate financepy_env
-   poetry run pitch search {TICKER} "query" --doc-type {filter} -k 5
+   uv run pitch search {TICKER} "query" --doc-type {filter} -k 5
    ```
 
 1. Process results and update file immediately before moving to next question
@@ -102,13 +101,11 @@ ______________________________________________________________________
 ## Search Command
 
 ```bash
-source ~/miniconda3/etc/profile.d/conda.sh && conda activate financepy_env
-
 # With source filter
-poetry run pitch search {TICKER} "query" --doc-type {filter} -k 5
+uv run pitch search {TICKER} "query" --doc-type {filter} -k 5
 
 # Without filter (if sources is empty/all)
-poetry run pitch search {TICKER} "query" -k 5
+uv run pitch search {TICKER} "query" -k 5
 ```
 
 ## Limits
@@ -159,7 +156,7 @@ ______________________________________________________________________
 After all questions processed, update `.manifest.json`:
 
 ```bash
-poetry run python -c "
+uv run python -c "
 from pathlib import Path
 from src.questions.manifest import QuestionManifest
 from src.questions.parser import parse_question_file
