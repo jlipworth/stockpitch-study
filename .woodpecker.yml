@@ -21,6 +21,8 @@ when:
     cron: renovate
 
 variables:
+  # Pre-built image with Poetry and dependencies installed
+  # Rebuild when pyproject.toml changes: ./ci/build-image.sh --push
   - &ci_image jlipworth/stock-pitch-ci:latest
 
 clone:
