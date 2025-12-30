@@ -1,111 +1,107 @@
-# Company Context: Pure Storage (PSTG)
+# Company Context Template
 
-## Ticker
+<!-- This file contains company-specific research context. Referenced by CLAUDE.md. -->
 
-PSTG (Pure Storage, Inc.)
+<!-- Copy this template and customize for each company case study. -->
 
-## Position
+## Example: Apple Inc. (AAPL)
 
-**SHORT** - Valuation / growth deceleration + Technology obsolescence risk
+Below is a filled-in example for reference. Replace with your target company's details.
 
-## Fiscal Calendar
+### Ticker
 
-- Fiscal year ends **first Sunday of February**
-- Q1 = Feb-Apr, Q2 = May-Jul, Q3 = Aug-Oct, Q4 = Nov-Jan
-- Example: Q3 FY2025 = Aug-Oct 2024, filed December 2024
-- FY2025 ends February 2, 2025
+AAPL (Apple Inc.)
 
-## Key Metrics (Enterprise Storage / Subscription SaaS)
+### Fiscal Calendar
 
-### Revenue & Growth
+- Fiscal year ends **last Saturday of September**
+- Q1 = Oct-Dec, Q2 = Jan-Mar, Q3 = Apr-Jun, Q4 = Jul-Sep
+- Example: Q1 FY2025 = Oct-Dec 2024, filed January 2025
 
-- Total revenue and YoY growth
-- Product revenue (hardware) vs Subscription services revenue
-- Revenue mix shift toward subscription
+### Key Metrics (Consumer Electronics / Services)
 
-### Subscription Metrics
+- iPhone revenue and units (mix by model)
+- Services revenue and gross margin
+- Installed base growth
+- Geographic mix (Americas, Europe, Greater China, Japan, Rest of Asia Pacific)
+- Gross margin by segment (Products vs Services)
+- Capital return (dividends + buybacks)
 
-- ARR (Annual Recurring Revenue) - Evergreen subscription
-- RPO (Remaining Performance Obligations)
-- NRR (Net Revenue Retention)
-- Subscription gross margin vs Product gross margin
+### Current Investment Narrative
 
-### Profitability
+- Services growth as higher-margin recurring revenue
+- iPhone replacement cycle dynamics
+- China market share and competition
+- AI/ML integration into devices
+- Wearables growth trajectory
 
-- Non-GAAP operating margin
-- Free cash flow
-- Stock-based compensation (as % of revenue)
-- GAAP vs Non-GAAP spread
+### Available Documents (Indexed)
 
-### Competitive Position
+<!-- Update after running `pitch inventory` -->
 
-- Win rates vs Dell, NetApp
-- New customer additions
-- FlashArray vs FlashBlade mix
-- Geographic revenue split
+- SEC Filings: 8 docs (2x 10-K, 4x 10-Q, 2x 8-K)
+- Transcripts: 4 earnings calls
+- Conferences: 2 transcripts
+- Presentations: 1 investor day
+- Analyst Reports: 3
 
-## Investment Narrative (Short Thesis)
-
-### 1. Valuation / Growth Deceleration
-
-- Revenue growth slowing as flash array market matures
-- Premium valuation multiple at risk of compression
-- Subscription transition may mask underlying hardware weakness
-- Comparison to peers (Dell, NetApp) on growth-adjusted basis
-
-### 2. Technology Obsolescence Risk
-
-- **NVMe-oF (NVMe over Fabrics)**: Commoditizing flash arrays
-- **CXL (Compute Express Link)**: Potentially obsoletes traditional storage architecture
-- **Cloud-native storage**: AWS EBS, Azure Disks, GCP Persistent Disk
-- **Kubernetes-native storage**: Portworx (IBM), Longhorn, OpenEBS
-
-### 3. Competitive Pressure
-
-- Dell PowerStore aggressive pricing and bundling
-- NetApp AFF with ONTAP software moat
-- HPE Alletra modernization
-- Hyperscaler native storage eroding on-prem TAM
-
-### 4. Financial Concerns
-
-- Heavy stock-based compensation
-- Evergreen subscription economics (hardware refresh hidden in subscription)
-- Customer concentration risk
-- Gross margin trajectory as mix shifts
-
-## Available Documents (Indexed)
-
-<!-- Update after running `uv run pitch inventory` -->
-
-- SEC Filings: 0 docs
-- Transcripts: 0 earnings calls
-- Conferences: 0 transcripts
-- Presentations: 0
-- Analyst Reports: 0
-
-**Total Index:** 0 chunks across 0 documents
+**Total Index:** 2,450 chunks across 18 documents
 
 ______________________________________________________________________
 
-## Key Competitors to Research
+## Template (Copy Below for Your Company)
 
-### Primary Flash Array Competitors
+### Ticker
 
-- **NetApp**: ONTAP, AFF, cloud strategy (BlueXP, Cloud Volumes)
-- **Dell EMC**: PowerStore, PowerScale, APEX STaaS
-- **HPE**: Primera, Alletra, GreenLake
-- **IBM**: FlashSystem, Spectrum Virtualize
-- **Hitachi Vantara**: VSP series
+{TICKER} ({Company Name})
 
-### Adjacent Competitors
+### Fiscal Calendar
 
-- **Hyper-converged**: Nutanix, VMware vSAN
-- **Cloud-native**: AWS EBS/FSx, Azure Managed Disks, GCP Persistent Disk
-- **Kubernetes storage**: Portworx, Longhorn, OpenEBS
+- Fiscal year ends **{Month Day}**
+- Q1 = {months}, Q2 = {months}, Q3 = {months}, Q4 = {months}
+- Example: Q2 FY2026 = {months} 2025, filed {month} 2025
 
-### Emerging Technology
+### Key Metrics ({Industry})
 
-- NVMe-oF native players
-- CXL-enabled storage
-- Disaggregated/composable infrastructure
+<!-- Customize based on industry. Examples below: -->
+
+**SaaS/Software:**
+
+- ARR (Annual Recurring Revenue)
+- NRR (Net Revenue Retention)
+- Customer count and logo churn
+- Gross margin (subscription vs services)
+
+**Financials:**
+
+- NIM (Net Interest Margin)
+- Loan growth and credit quality
+- Capital ratios (CET1, Tier 1)
+- Fee income mix
+
+**Industrials:**
+
+- Capacity utilization
+- Backlog and book-to-bill
+- Input cost trends
+- Working capital efficiency
+
+### Current Investment Narrative
+
+<!-- Key thesis points, recent developments, catalysts -->
+
+- Point 1
+- Point 2
+- Point 3
+
+### Available Documents (Indexed)
+
+<!-- Update after running `pitch inventory` -->
+
+- SEC Filings: X docs
+- Transcripts: X earnings calls
+- Conferences: X transcripts
+- Presentations: X
+- Analyst Reports: X
+
+**Total Index:** X chunks across X documents
