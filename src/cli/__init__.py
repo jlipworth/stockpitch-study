@@ -96,7 +96,7 @@ SOURCE_DIRS = {
 
 # Import and register command modules
 # These imports must come after app is defined to avoid circular imports
-from src.cli import batch, fetch, index, misc, search, summarize  # noqa: E402, F401
+from src.cli import batch, daemon, fetch, index, misc, search, summarize  # noqa: E402, F401
 
 __all__ = [
     "app",

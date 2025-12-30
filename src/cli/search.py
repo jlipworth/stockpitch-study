@@ -1,11 +1,14 @@
 """Search and ask commands for querying indexed documents."""
 
+import json
 import logging
+from pathlib import Path
 from typing import Annotated
 
 import typer
 
 from src.rag import SearchConfig, Searcher, render_table_as_markdown
+from src.rag.embeddings import EmbeddingModel, Reranker
 
 from . import (
     INDEX_DIR,
@@ -47,7 +50,7 @@ def _get_fiscal_info(ticker: str) -> str:
 def search(
     company: Annotated[str, typer.Argument(help="Company identifier")],
     query: Annotated[str, typer.Argument(help="Search query")],
-    top_k: Annotated[int, typer.Option("--top-k", "-k", help="Number of results to return")] = 10,
+    top_k: Annotated[int, typer.Option("--top-k", "-k", "--limit", help="Number of results to return")] = 10,
     doc_type: Annotated[
         str | None, typer.Option("--doc-type", "-d", help="Filter by document type (e.g., 10-K)")
     ] = None,
@@ -80,6 +83,21 @@ def search(
             help="Filter by table type: financial_statement, compensation, comparison, other (implies --table)",
         ),
     ] = None,
+    no_daemon: Annotated[
+        bool,
+        typer.Option(
+            "--no-daemon",
+            help="Force local model loading (skip daemon even if running)",
+        ),
+    ] = False,
+    output: Annotated[
+        str | None,
+        typer.Option(
+            "--output",
+            "-o",
+            help="Save results to JSON file instead of printing (e.g., results.json)",
+        ),
+    ] = None,
 ) -> None:
     """Search indexed documents with hybrid search.
 
@@ -94,6 +112,10 @@ def search(
     - --table: Show only chunks containing tables
     - --no-table: Exclude chunks containing tables
     - --table-type TYPE: Filter by specific table type (implies --table)
+
+    Daemon:
+    - By default, uses embedding daemon if running (faster queries)
+    - Use --no-daemon to force local model loading
     """
     ticker = company.upper()
 
@@ -134,10 +156,18 @@ def search(
             task = progress.add_task("Loading search index...", total=None)
 
             config = SearchConfig(mode=mode, top_k=top_k, rerank=rerank)  # type: ignore
+
+            # Create models with daemon setting
+            use_daemon = not no_daemon
+            embedding_model = EmbeddingModel(use_daemon=use_daemon)
+            reranker_model = Reranker(use_daemon=use_daemon) if rerank else None
+
             searcher = Searcher(
                 index_dir=INDEX_DIR,
                 ticker=ticker,
                 config=config,
+                embedding_model=embedding_model,
+                reranker=reranker_model,
             )
 
             if rerank:
@@ -169,6 +199,42 @@ def search(
         console.print(f"[red]{e}[/red]")
         raise typer.Exit(1)
 
+    # If --output specified, save to JSON file instead of printing
+    if output:
+        output_path = Path(output)
+        # Build JSON-serializable results
+        json_results = []
+        for result in results:
+            json_results.append(
+                {
+                    "filing_type": result.filing_type,
+                    "filing_date": result.filing_date,
+                    "section": result.section,
+                    "score": result.score,
+                    "text": result.text,
+                    "has_table": result.has_table,
+                    "table_html": result.table_html if result.has_table else None,
+                    "table_caption": result.table_caption if result.has_table else None,
+                }
+            )
+
+        output_data = {
+            "query": query,
+            "ticker": ticker,
+            "mode": mode,
+            "rerank": rerank,
+            "top_k": top_k,
+            "doc_type": doc_type,
+            "section": section,
+            "result_count": len(results),
+            "results": json_results,
+        }
+
+        output_path.write_text(json.dumps(output_data, indent=2))
+        console.print(f"[green]Results saved to:[/green] {output_path}")
+        console.print(f"[dim]{len(results)} results for: {query}[/dim]")
+        return
+
     # Display results
     console.print(f"\n[bold]Results for:[/bold] {query}")
     rerank_info = " + rerank" if rerank else ""
@@ -181,8 +247,13 @@ def search(
         table_info = " | Tables only"
     elif table is False:
         table_info = " | No tables"
+    # Check if daemon was used
+    daemon_used = use_daemon and embedding_model._daemon_client is not None and embedding_model._daemon_checked
+    daemon_info = " | [green]daemon[/green]" if daemon_used else ""
     result_count = len(expanded_results) if expanded_results else len(results)
-    console.print(f"[dim]Mode: {mode}{rerank_info}{context_info}{table_info} | Found: {result_count} results[/dim]\n")
+    console.print(
+        f"[dim]Mode: {mode}{rerank_info}{context_info}{table_info}{daemon_info} | Found: {result_count} results[/dim]\n"
+    )
 
     if not results:
         console.print("[yellow]No results found.[/yellow]")

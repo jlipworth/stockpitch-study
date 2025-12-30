@@ -6,7 +6,7 @@ This script automates the setup of a new company for stock pitch analysis:
 1. Creates .env file with SEC_USER_AGENT
 2. Creates/updates COMPANY.md with company context
 3. Creates folder structure for all document types
-4. Runs `poetry run pitch fetch` to download SEC filings
+4. Runs `uv run pitch fetch` to download SEC filings
 5. Optionally prints competitor research instructions
 
 Usage:
@@ -18,7 +18,6 @@ Usage:
 from __future__ import annotations
 
 import argparse
-import os
 import signal
 import subprocess
 import sys
@@ -305,7 +304,7 @@ def generate_company_md(
 {thesis_narrative}
 ## Available Documents (Indexed)
 
-<!-- Update after running `poetry run pitch inventory` -->
+<!-- Update after running `uv run pitch inventory` -->
 
 - SEC Filings: 0 docs
 - Transcripts: 0 earnings calls
@@ -444,7 +443,7 @@ def run_fetch_command(project_root: Path, ticker: str, years: int) -> bool:
 
     # Build the command
     cmd = [
-        "poetry",
+        "uv",
         "run",
         "pitch",
         "fetch",
@@ -473,9 +472,9 @@ def run_fetch_command(project_root: Path, ticker: str, years: int) -> bool:
             return False
 
     except FileNotFoundError:
-        print_error("Poetry not found. Make sure Poetry is installed and in PATH.")
+        print_error("uv not found. Make sure uv is installed and in PATH.")
         print_info("You can run the fetch command manually:")
-        print(f"  poetry run pitch fetch {ticker_upper} -t '10-K,10-Q,8-K,DEF 14A' -y {years}")
+        print(f"  uv run pitch fetch {ticker_upper} -t '10-K,10-Q,8-K,DEF 14A' -y {years}")
         return False
 
     except Exception as e:
@@ -514,8 +513,8 @@ def print_research_instructions(ticker: str) -> None:
 
 {Colors.BOLD}5. Use the Research Agent{Colors.RESET}
    After indexing documents, use the /research command to query:
-   - poetry run pitch search {ticker_upper} "competitor"
-   - poetry run pitch ask {ticker_upper} "What are the main competitors?"
+   - uv run pitch search {ticker_upper} "competitor"
+   - uv run pitch ask {ticker_upper} "What are the main competitors?"
 """)
 
 
@@ -542,20 +541,20 @@ def print_next_steps(ticker: str, fetched: bool) -> None:
 
     if not fetched:
         print(f"""{Colors.BOLD}3. Fetch SEC Filings{Colors.RESET}
-   poetry run pitch fetch {ticker_upper} -t "10-K,10-Q,8-K,DEF 14A" -y 6
+   uv run pitch fetch {ticker_upper} -t "10-K,10-Q,8-K,DEF 14A" -y 6
 """)
 
     print(f"""{Colors.BOLD}{"3" if fetched else "4"}. Build Index and Summarize{Colors.RESET}
-   poetry run pitch index {ticker_upper} --source all
-   poetry run pitch summarize {ticker_upper} --latest
+   uv run pitch index {ticker_upper} --source all
+   uv run pitch summarize {ticker_upper} --latest
 
 {Colors.BOLD}{"4" if fetched else "5"}. Run Inventory{Colors.RESET}
-   poetry run pitch inventory
+   uv run pitch inventory
    # Then update COMPANY.md with document counts
 
 {Colors.BOLD}{"5" if fetched else "6"}. Start Research{Colors.RESET}
-   poetry run pitch search {ticker_upper} "revenue growth"
-   poetry run pitch ask {ticker_upper} "What is the company's competitive advantage?"
+   uv run pitch search {ticker_upper} "revenue growth"
+   uv run pitch ask {ticker_upper} "What is the company's competitive advantage?"
 """)
 
 
@@ -601,13 +600,11 @@ Examples:
     print_header("Stock Pitch Company Setup")
     print(f"Project root: {project_root}")
 
-    # Check for conda environment
-    conda_env = os.environ.get("CONDA_DEFAULT_ENV")
-    if conda_env:
-        print_info(f"Conda environment: {conda_env}")
-    else:
-        print_warning("No conda environment detected. If using conda, activate it first:")
-        print("  conda activate financepy_env")
+    # Check for uv
+    import shutil
+
+    if not shutil.which("uv"):
+        print_warning("uv not found in PATH. Install it from: https://docs.astral.sh/uv/")
 
     # Collect required inputs
     print_header("Company Information")

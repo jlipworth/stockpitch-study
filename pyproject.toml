@@ -1,63 +1,61 @@
-[tool.poetry]
+[project]
 name = "stock-pitch"
 version = "1.0.0"
 description = "Toolkit for rapid company analysis and stock pitch recommendations"
-authors = ["Jonathan Lipworth <jonathan.lipworth@gmail.com>"]
+authors = [{name = "Jonathan Lipworth", email = "jonathan.lipworth@gmail.com"}]
 readme = "README.md"
-packages = [{include = "src"}]
+requires-python = ">=3.12"
 
-[tool.poetry.scripts]
+dependencies = [
+    # Embeddings and vector store
+    "sentence-transformers>=3.3",
+    "lancedb>=0.21",
+    "tantivy>=0.22",      # Required for LanceDB full-text search
+    "pylance>=0.25",      # Required for LanceDB FTS index population
+
+    # LLM API
+    "anthropic>=0.75",    # Requires 0.75+ for Message Batches API
+
+    # Config
+    "python-dotenv>=1.0",
+
+    # SEC filings
+    "edgartools>=3.0",
+
+    # Document parsing
+    "beautifulsoup4>=4.12",
+    "lxml>=5.3",
+    "pymupdf>=1.25",      # PDF page extraction for handwriting conversion
+    "pyyaml>=6.0",        # YAML parsing for questions
+
+    # CLI
+    "typer>=0.15",
+    "rich>=13.9",
+]
+
+[project.scripts]
 pitch = "src.cli:app"
 
-# =============================================================================
-# PyTorch CPU-only source for CI (saves ~8GB vs CUDA version)
-# Usage in CI: pip install torch --index-url https://download.pytorch.org/whl/cpu
-#              poetry install --no-root
-# =============================================================================
-[[tool.poetry.source]]
-name = "pytorch-cpu"
-url = "https://download.pytorch.org/whl/cpu"
-priority = "explicit"
-
-[tool.poetry.dependencies]
-python = "^3.12"
-
-# Embeddings and vector store
-sentence-transformers = "^3.3"
-lancedb = "^0.21"
-tantivy = "^0.22"  # Required for LanceDB full-text search
-pylance = "^0.25"  # Required for LanceDB FTS index population
-
-# LLM API
-anthropic = "^0.75"  # Requires 0.75+ for Message Batches API
-
-# Config
-python-dotenv = "^1.0"
-
-# SEC filings
-edgartools = "^3.0"
-
-# Document parsing
-beautifulsoup4 = "^4.12"
-lxml = "^5.3"
-pymupdf = "^1.25"  # PDF page extraction for handwriting conversion
-pyyaml = "^6.0"  # YAML parsing for questions
-
-# CLI
-typer = "^0.15"
-rich = "^13.9"
-
-[tool.poetry.group.dev.dependencies]
-pytest = "^8.3"
-ruff = "^0.8"
-mypy = "^1.13"
-pre-commit = "^4.0"
-mdformat = "^0.7"
-mdformat-gfm = "^0.3"  # GitHub-flavored markdown (tables, etc.)
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "ruff>=0.8",
+    "mypy>=1.13",
+    "pre-commit>=4.0",
+    "mdformat>=0.7",
+    "mdformat-gfm>=0.3",  # GitHub-flavored markdown (tables, etc.)
+]
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
+
+# =============================================================================
+# Tool Configuration
+# =============================================================================
 
 [tool.ruff]
 line-length = 120

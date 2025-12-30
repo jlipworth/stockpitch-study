@@ -523,8 +523,8 @@ class SemanticChunker:
 **External Dependencies** (optional):
 
 ```bash
-poetry add spacy
-python -m spacy download en_core_web_sm
+uv add spacy
+uv run python -m spacy download en_core_web_sm
 ```
 
 **Integration with Parser**:
@@ -756,8 +756,8 @@ class ChunkEnricher:
 **External Dependencies** (optional):
 
 ```bash
-poetry add spacy
-python -m spacy download en_core_web_sm
+uv add spacy
+uv run python -m spacy download en_core_web_sm
 ```
 
 **Index Rebuild Required**: YES

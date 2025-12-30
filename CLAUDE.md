@@ -25,33 +25,57 @@ A toolkit for rapidly analyzing company case studies and producing stock pitch r
 
 ### Prerequisites
 
-- **Conda**: Using `financepy_env` environment
-- **Poetry**: For dependency management (not virtualenv - conda handles that)
-- **Python 3.12**: Required
+- **uv**: Python package manager ([install](https://docs.astral.sh/uv/getting-started/installation/))
+- **Python 3.12**: Required (uv will install if needed)
 
 ### Setup
 
 ```bash
-# Activate conda environment
-conda activate financepy_env
-
-# Install dependencies with Poetry (uses system Python from conda)
-poetry config virtualenvs.create false
-poetry install
+# Install dependencies (creates .venv automatically)
+uv sync
 
 # Install pre-commit hooks
-pre-commit install
+uv run pre-commit install
 ```
 
 ### Running the CLI
 
 ```bash
-# Always use poetry run to ensure you're using the current fork's code:
-poetry run pitch --help
+# Use uv run to ensure you're using the current fork's code:
+uv run pitch --help
 
-# Or run directly:
-python -m src.cli --help
+# Or activate the venv and run directly:
+source .venv/bin/activate
+pitch --help
 ```
+
+### Embedding Daemon
+
+For faster searches, start the embedding daemon to keep models loaded in GPU memory:
+
+```bash
+# Start daemon (foreground)
+uv run pitch serve
+
+# Start daemon (background, auto-stops after 15 min idle)
+uv run pitch serve --background
+
+# Check status
+uv run pitch daemon-status
+
+# Stop daemon
+uv run pitch daemon-stop
+```
+
+When running, `pitch search` auto-detects the daemon and uses it for embedding/reranking.
+Use `--no-daemon` to force local model loading.
+
+**Architecture:**
+
+- Unix socket IPC (`.pitch-daemon.sock` in project root)
+- Sequential request queue (prevents GPU OOM)
+- Memory-based batch sizing (adapts to GPU)
+- 15-min idle auto-shutdown (configurable)
 
 ## Core Components
 
@@ -209,7 +233,7 @@ When starting a new session, these folders contain the most useful context:
 
 **Verification workflow:**
 
-1. Before adding a figure, search the index: `poetry run pitch search {TICKER} "query"`
+1. Before adding a figure, search the index: `uv run pitch search {TICKER} "query"`
 1. If not found, mark as `[UNVERIFIED]` or remove
 1. Periodically audit research notes for unverified claims
 

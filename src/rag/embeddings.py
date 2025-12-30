@@ -8,6 +8,8 @@ BGE-M3 supports:
 We use dense embeddings via sentence-transformers for simplicity.
 """
 
+from __future__ import annotations
+
 from dataclasses import dataclass, field
 
 import numpy as np
@@ -153,6 +155,7 @@ class EmbeddingModel:
         device: str | None = None,
         batch_size: int | None = None,
         normalize: bool = True,
+        use_daemon: bool = True,
     ):
         """
         Initialize embedding model.
@@ -162,14 +165,18 @@ class EmbeddingModel:
             device: Device to use (cuda/mps/cpu). Auto-detected if None.
             batch_size: Batch size for encoding. Auto-detected by device if None.
             normalize: Whether to L2-normalize embeddings (recommended for BGE)
+            use_daemon: Try to use embedding daemon if available (faster for queries)
         """
         self.model_name = model_name
         self.device = device or detect_device()
         self.batch_size = batch_size or get_default_batch_size(self.device)
         self.normalize = normalize
+        self.use_daemon = use_daemon
 
         # Lazy load model
         self._model: SentenceTransformer | None = None
+        self._daemon_client: DaemonClient | None = None  # type: ignore[name-defined]  # noqa: F821
+        self._daemon_checked = False
 
     @property
     def model(self) -> SentenceTransformer:
@@ -180,6 +187,24 @@ class EmbeddingModel:
                 device=self.device,
             )
         return self._model
+
+    def _get_daemon_client(self) -> DaemonClient | None:  # type: ignore[name-defined]  # noqa: F821
+        """Get daemon client if available (checked once per instance)."""
+        if not self.use_daemon:
+            return None
+        if self._daemon_checked:
+            return self._daemon_client
+
+        self._daemon_checked = True
+        try:
+            from src.daemon.client import get_daemon_client
+
+            # Don't auto-spawn for embedding model - let search command handle that
+            self._daemon_client = get_daemon_client(auto_spawn=False)
+        except ImportError:
+            self._daemon_client = None
+
+        return self._daemon_client
 
     @property
     def embedding_dim(self) -> int:
@@ -221,6 +246,9 @@ class EmbeddingModel:
         """
         Encode a search query.
 
+        If daemon is available and use_daemon=True, uses daemon for faster encoding.
+        Otherwise falls back to local model.
+
         Note: BGE-M3 does not require instruction prefixes (unlike BGE-large).
 
         Args:
@@ -229,6 +257,16 @@ class EmbeddingModel:
         Returns:
             Numpy array of shape (embedding_dim,)
         """
+        # Try daemon first
+        client = self._get_daemon_client()
+        if client is not None:
+            try:
+                return client.embed_query(query)
+            except Exception:
+                # Fall back to local model
+                pass
+
+        # Local model encoding
         embedding = self.model.encode(
             [query],
             normalize_embeddings=self.normalize,
@@ -300,6 +338,7 @@ class Reranker:
         model_name: str = DEFAULT_RERANKER,
         device: str | None = None,
         batch_size: int = 4,  # Very conservative - runs alongside embedding model with long texts
+        use_daemon: bool = True,
     ):
         """
         Initialize reranker.
@@ -308,13 +347,17 @@ class Reranker:
             model_name: HuggingFace cross-encoder model name
             device: Device to use (cuda/mps/cpu). Auto-detected if None.
             batch_size: Batch size for scoring pairs
+            use_daemon: Try to use embedding daemon if available (faster)
         """
         self.model_name = model_name
         self.device = device or detect_device()
         self.batch_size = batch_size
+        self.use_daemon = use_daemon
 
         # Lazy load model
         self._model: CrossEncoder | None = None
+        self._daemon_client: DaemonClient | None = None  # type: ignore[name-defined]  # noqa: F821
+        self._daemon_checked = False
 
     @property
     def model(self) -> CrossEncoder:
@@ -326,6 +369,24 @@ class Reranker:
             )
         return self._model
 
+    def _get_daemon_client(self) -> DaemonClient | None:  # type: ignore[name-defined]  # noqa: F821
+        """Get daemon client if available (checked once per instance)."""
+        if not self.use_daemon:
+            return None
+        if self._daemon_checked:
+            return self._daemon_client
+
+        self._daemon_checked = True
+        try:
+            from src.daemon.client import get_daemon_client
+
+            # Don't auto-spawn - let search command handle that
+            self._daemon_client = get_daemon_client(auto_spawn=False)
+        except ImportError:
+            self._daemon_client = None
+
+        return self._daemon_client
+
     def rerank(
         self,
         query: str,
@@ -335,6 +396,9 @@ class Reranker:
     ) -> list[RerankResult]:
         """
         Rerank texts by relevance to query.
+
+        If daemon is available and use_daemon=True, uses daemon for faster reranking.
+        Otherwise falls back to local model.
 
         Args:
             query: The search query
@@ -348,6 +412,30 @@ class Reranker:
         if not texts:
             return []
 
+        # Try daemon first
+        client = self._get_daemon_client()
+        if client is not None:
+            try:
+                reranked_texts, scores, indices = client.rerank(query, texts, top_k)
+                # Handle metadata
+                if metadata is None:
+                    metadata = [{} for _ in texts]
+                # Build results from daemon response
+                results = [
+                    RerankResult(
+                        text=text,
+                        score=score,
+                        metadata=metadata[idx] if idx < len(metadata) else {},
+                        original_rank=idx,
+                    )
+                    for text, score, idx in zip(reranked_texts, scores, indices)
+                ]
+                return results
+            except Exception:
+                # Fall back to local model
+                pass
+
+        # Local model scoring
         # Create (query, text) pairs for scoring
         pairs = [[query, text] for text in texts]
 

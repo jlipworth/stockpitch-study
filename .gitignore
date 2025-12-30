@@ -24,9 +24,11 @@ wheels/
 .installed.cfg
 *.egg
 
-# Poetry
-poetry.lock
+# uv / Python environment
 .venv/
+
+# Daemon socket
+.pitch-daemon.sock
 
 # IDE
 .idea/
