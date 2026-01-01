@@ -40,6 +40,11 @@ FILTERABLE_COLUMNS = frozenset(
         "has_table",
         "table_type",
         "is_table_continuation",
+        # Fiscal period filtering (extracted from iXBRL metadata)
+        "fiscal_year",
+        "fiscal_quarter",
+        # Source type filtering (transcript, conference, analyst, etc.)
+        "source_type",
     }
 )
 
@@ -481,6 +486,10 @@ class VectorStore:
                 "table_caption": chunk.metadata.get("table_caption", ""),
                 "table_type": chunk.metadata.get("table_type", ""),
                 "is_table_continuation": chunk.metadata.get("is_table_continuation", False),
+                # Fiscal period filtering (extracted from iXBRL metadata)
+                # Use 0 as "unknown" to maintain consistent int64 schema
+                "fiscal_year": chunk.metadata.get("fiscal_year") or 0,
+                "fiscal_quarter": chunk.metadata.get("fiscal_quarter") or 0,
                 # Store full metadata as JSON for flexibility
                 "metadata_json": json.dumps(chunk.metadata),
             }

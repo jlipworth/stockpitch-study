@@ -273,6 +273,9 @@ uv run pitch search AAPL "revenue" --limit 5
 # Rerank results with cross-encoder for better precision (fetches 50, reranks to top-k)
 uv run pitch search AAPL "net interest margin" --rerank
 
+# Filter by fiscal period (FY25, FY25Q3, Q3FY25 formats supported)
+uv run pitch search AAPL "revenue growth" --fiscal-period FY25Q3
+
 # Force local model (skip daemon)
 uv run pitch search AAPL "revenue" --no-daemon
 
