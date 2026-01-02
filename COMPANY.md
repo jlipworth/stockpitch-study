@@ -1,107 +1,82 @@
-# Company Context Template
+# BLK (BlackRock, Inc.) - Company Context
 
 <!-- This file contains company-specific research context. Referenced by CLAUDE.md. -->
 
-<!-- Copy this template and customize for each company case study. -->
+## Ticker
 
-## Example: Apple Inc. (AAPL)
+BLK (BlackRock, Inc.)
 
-Below is a filled-in example for reference. Replace with your target company's details.
+## Fiscal Calendar
 
-### Ticker
+- Fiscal year ends **December 31**
+- Q1 = Jan-Mar, Q2 = Apr-Jun, Q3 = Jul-Sep, Q4 = Oct-Dec
+- Example: Q3 FY2025 = Jul-Sep 2025, filed Oct 2025
 
-AAPL (Apple Inc.)
+## SEC CIK Note
 
-### Fiscal Calendar
+BlackRock changed SEC filing entity in late 2024:
+- **Old CIK 1364742**: 2018-2024 filings
+- **New CIK 2012383**: 2024+ filings
 
-- Fiscal year ends **last Saturday of September**
-- Q1 = Oct-Dec, Q2 = Jan-Mar, Q3 = Apr-Jun, Q4 = Jul-Sep
-- Example: Q1 FY2025 = Oct-Dec 2024, filed January 2025
+## Key Metrics (Asset Management)
 
-### Key Metrics (Consumer Electronics / Services)
+- AUM (Assets Under Management) - total and by segment
+- Net flows - organic growth driver (inflows - outflows)
+- Base fees and fee rate (bps) - revenue quality
+- Operating income, as adjusted - profitability measure
+- Operating margin, as adjusted - efficiency metric
+- Technology services revenue (Aladdin) - growth driver
 
-- iPhone revenue and units (mix by model)
-- Services revenue and gross margin
-- Installed base growth
-- Geographic mix (Americas, Europe, Greater China, Japan, Rest of Asia Pacific)
-- Gross margin by segment (Products vs Services)
-- Capital return (dividends + buybacks)
+### AUM Segments
 
-### Current Investment Narrative
+- Equity (active, index, ETFs)
+- Fixed Income (active, index, ETFs)
+- Multi-Asset
+- Alternatives (illiquid: private equity, real assets, hedge funds)
+- Cash Management
 
-- Services growth as higher-margin recurring revenue
-- iPhone replacement cycle dynamics
-- China market share and competition
-- AI/ML integration into devices
-- Wearables growth trajectory
+## Current Investment Narrative
 
-### Available Documents (Indexed)
+<!-- Key thesis points - update as research progresses -->
 
-<!-- Update after running `pitch inventory` -->
+- Fee pressure: secular decline in basis fees, partially offset by mix shift
+- Private markets expansion: building alternatives platform for fee diversification
+- Aladdin technology services: sticky, high-margin revenue stream
+- Tokenization/digital assets: BUIDL fund, blockchain infrastructure
+- Succession planning: Larry Fink (72) and leadership depth
+- Capital allocation: M&A history, buybacks, dividend growth
 
-- SEC Filings: 8 docs (2x 10-K, 4x 10-Q, 2x 8-K)
-- Transcripts: 4 earnings calls
-- Conferences: 2 transcripts
-- Presentations: 1 investor day
-- Analyst Reports: 3
-
-**Total Index:** 2,450 chunks across 18 documents
-
-______________________________________________________________________
-
-## Template (Copy Below for Your Company)
-
-### Ticker
-
-{TICKER} ({Company Name})
-
-### Fiscal Calendar
-
-- Fiscal year ends **{Month Day}**
-- Q1 = {months}, Q2 = {months}, Q3 = {months}, Q4 = {months}
-- Example: Q2 FY2026 = {months} 2025, filed {month} 2025
-
-### Key Metrics ({Industry})
-
-<!-- Customize based on industry. Examples below: -->
-
-**SaaS/Software:**
-
-- ARR (Annual Recurring Revenue)
-- NRR (Net Revenue Retention)
-- Customer count and logo churn
-- Gross margin (subscription vs services)
-
-**Financials:**
-
-- NIM (Net Interest Margin)
-- Loan growth and credit quality
-- Capital ratios (CET1, Tier 1)
-- Fee income mix
-
-**Industrials:**
-
-- Capacity utilization
-- Backlog and book-to-bill
-- Input cost trends
-- Working capital efficiency
-
-### Current Investment Narrative
-
-<!-- Key thesis points, recent developments, catalysts -->
-
-- Point 1
-- Point 2
-- Point 3
-
-### Available Documents (Indexed)
+## Available Documents (Indexed)
 
 <!-- Update after running `pitch inventory` -->
 
-- SEC Filings: X docs
-- Transcripts: X earnings calls
-- Conferences: X transcripts
-- Presentations: X
-- Analyst Reports: X
+### From BLK2 Research (Transferred)
 
-**Total Index:** X chunks across X documents
+- Notes: 7 handwritten note PDFs + markdown transcriptions
+- Research: 10 research markdown files
+
+### To Be Indexed
+
+- SEC Filings: Pending fetch
+- Transcripts: Pending
+- Conferences: Pending
+- Analyst Reports: Pending
+
+**Total Index:** Not yet built - run `poetry run pitch index BLK --source all`
+
+## Research Files Reference
+
+Located in `research/` folder:
+
+| File | Content |
+|------|---------|
+| `BlackRock_Comprehensive_History.md` | Full company history, M&A, products |
+| `BlackRock_Fee_Intensity_Analysis.md` | Fee intensity by segment, AUM mix, margin analysis |
+| `BlackRock_Investor_Day_2025.md` | June 2025 Investor Day - 2030 targets |
+| `Aladdin_Systemic_Risk.md` | Aladdin concentration risk, SIFI history |
+| `BlackRock_Tokenization_Strategy.md` | Tokenization vision, BUIDL, digital assets |
+| `BlackRock_AUM_Tables.md` | AUM waterfall tables from 10-K/10-Q |
+| `BlackRock_Succession_Planning.md` | Management succession analysis |
+| `Fink_Compensation_2018-2024.md` | CEO compensation history |
+| `BLK_MA_History.md` | M&A transaction details |
+| `BLK_Carry_Incentives.md` | Carried interest and incentives |
