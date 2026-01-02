@@ -11,12 +11,14 @@ We use dense embeddings via sentence-transformers for simplicity.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from typing import TYPE_CHECKING
 
 import numpy as np
-import torch
-from sentence_transformers import CrossEncoder, SentenceTransformer
 
 from .parser import Chunk
+
+if TYPE_CHECKING:
+    from sentence_transformers import CrossEncoder, SentenceTransformer
 
 # Default model - BGE-M3 (1024 dimensions, 8192 token context)
 # Larger context is critical for long SEC filing sections
@@ -39,6 +41,8 @@ BATCH_SIZE_BY_DEVICE = {
 
 def clear_gpu_cache() -> None:
     """Clear GPU memory cache to prevent OOM during long indexing runs."""
+    import torch
+
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
         torch.cuda.synchronize()  # Ensure cache is fully cleared
@@ -60,6 +64,8 @@ class EmbeddedChunk:
 
 def detect_device() -> str:
     """Auto-detect best available device for embeddings."""
+    import torch
+
     if torch.cuda.is_available():
         return "cuda"
     elif torch.backends.mps.is_available():
@@ -87,6 +93,8 @@ class GPUMemoryInfo:
 
 def get_gpu_memory() -> GPUMemoryInfo | None:
     """Get current GPU memory usage. Returns None if no GPU available."""
+    import torch
+
     if not torch.cuda.is_available():
         return None
 
@@ -182,6 +190,8 @@ class EmbeddingModel:
     def model(self) -> SentenceTransformer:
         """Lazy load the model on first access."""
         if self._model is None:
+            from sentence_transformers import SentenceTransformer
+
             self._model = SentenceTransformer(
                 self.model_name,
                 device=self.device,
@@ -363,6 +373,8 @@ class Reranker:
     def model(self) -> CrossEncoder:
         """Lazy load the model on first access."""
         if self._model is None:
+            from sentence_transformers import CrossEncoder
+
             self._model = CrossEncoder(
                 self.model_name,
                 device=self.device,
