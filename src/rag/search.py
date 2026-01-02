@@ -122,6 +122,9 @@ class Searcher:
         # Phase 2: Table Intelligence filters
         content_type: str | None = None,
         table_type: str | None = None,
+        # Fiscal period filters
+        fiscal_year: int | None = None,
+        fiscal_quarter: int | None = None,
     ) -> list[SearchResult]:
         """
         Search indexed documents.
@@ -137,6 +140,8 @@ class Searcher:
             expand: Whether to expand query with acronyms/synonyms. Uses config default if None.
             content_type: Filter by content type ("text" or "table"). Phase 2.
             table_type: Filter by table type (e.g., "financial_statement", "compensation"). Phase 2.
+            fiscal_year: Filter by fiscal year (e.g., 2025).
+            fiscal_quarter: Filter by fiscal quarter (1-4).
 
         Returns:
             List of SearchResult objects sorted by relevance
@@ -191,6 +196,11 @@ class Searcher:
             filter_dict["content_type"] = content_type
         if table_type:
             filter_dict["table_type"] = table_type
+        # Fiscal period filters
+        if fiscal_year:
+            filter_dict["fiscal_year"] = fiscal_year
+        if fiscal_quarter:
+            filter_dict["fiscal_quarter"] = fiscal_quarter
 
         # Initial retrieval
         if mode == "vector":

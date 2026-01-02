@@ -2,6 +2,7 @@
 
 import json
 import logging
+import re
 from pathlib import Path
 from typing import Annotated
 
@@ -22,6 +23,40 @@ from . import (
 )
 
 logger = logging.getLogger(__name__)
+
+
+def _parse_fiscal_period(period: str) -> tuple[int | None, int | None]:
+    """Parse fiscal period string into (fiscal_year, fiscal_quarter).
+
+    Accepts formats like: FY25, FY2025, FY25Q3, Q3FY25, FY2025Q3, Q3FY2025
+
+    Returns:
+        Tuple of (fiscal_year, fiscal_quarter) where values are None if not specified.
+        fiscal_year is 4-digit (e.g., 2025), fiscal_quarter is 1-4.
+    """
+    period = period.upper().strip()
+
+    # Match patterns like FY25, FY2025, FY25Q3, Q3FY25
+    # Pattern: optional Q[1-4], FY followed by 2 or 4 digit year, optional Q[1-4]
+    match = re.match(r"^(?:Q([1-4]))?FY(\d{2,4})(?:Q([1-4]))?$", period)
+    if not match:
+        return None, None
+
+    q_prefix, year_str, q_suffix = match.groups()
+
+    # Parse year (convert 2-digit to 4-digit)
+    year = int(year_str)
+    if year < 100:
+        year = 2000 + year
+
+    # Parse quarter (prefer suffix over prefix)
+    quarter = None
+    if q_suffix:
+        quarter = int(q_suffix)
+    elif q_prefix:
+        quarter = int(q_prefix)
+
+    return year, quarter
 
 
 def _get_fiscal_info(ticker: str) -> str:
@@ -83,6 +118,14 @@ def search(
             help="Filter by table type: financial_statement, compensation, comparison, other (implies --table)",
         ),
     ] = None,
+    fiscal_period: Annotated[
+        str | None,
+        typer.Option(
+            "--fiscal-period",
+            "-fp",
+            help="Filter by fiscal period (e.g., FY25, FY25Q3, Q3FY25, FY2025Q3)",
+        ),
+    ] = None,
     no_daemon: Annotated[
         bool,
         typer.Option(
@@ -113,6 +156,11 @@ def search(
     - --no-table: Exclude chunks containing tables
     - --table-type TYPE: Filter by specific table type (implies --table)
 
+    Fiscal period filtering:
+    - -fp FY25: Filter to fiscal year 2025
+    - -fp FY25Q3: Filter to Q3 of fiscal year 2025
+    - -fp Q3FY25: Same as above (alternative format)
+
     Daemon:
     - By default, uses embedding daemon if running (faster queries)
     - Use --no-daemon to force local model loading
@@ -134,6 +182,18 @@ def search(
     if table_type is not None and table_type not in valid_table_types:
         console.print(f"[red]Invalid table type: {table_type}. " f"Use one of: {', '.join(valid_table_types)}[/red]")
         raise typer.Exit(1)
+
+    # Parse fiscal period filter
+    fiscal_year: int | None = None
+    fiscal_quarter: int | None = None
+    if fiscal_period:
+        fiscal_year, fiscal_quarter = _parse_fiscal_period(fiscal_period)
+        if fiscal_year is None:
+            console.print(
+                f"[red]Invalid fiscal period: {fiscal_period}. "
+                f"Use format like FY25, FY2025, FY25Q3, or Q3FY25[/red]"
+            )
+            raise typer.Exit(1)
 
     # Determine content_type filter based on --table flag
     # --table-type implies --table
@@ -182,6 +242,8 @@ def search(
                 section=section,
                 content_type=content_type_filter,
                 table_type=table_type,
+                fiscal_year=fiscal_year,
+                fiscal_quarter=fiscal_quarter,
             )
 
             # Apply context expansion if requested
@@ -247,13 +309,25 @@ def search(
         table_info = " | Tables only"
     elif table is False:
         table_info = " | No tables"
+    # Build fiscal period info string
+    fiscal_info = ""
+    if fiscal_year:
+        if fiscal_quarter:
+            fiscal_info = f" | FY{fiscal_year % 100}Q{fiscal_quarter}"
+        else:
+            fiscal_info = f" | FY{fiscal_year % 100}"
     # Check if daemon was used
     daemon_used = use_daemon and embedding_model._daemon_client is not None and embedding_model._daemon_checked
     daemon_info = " | [green]daemon[/green]" if daemon_used else ""
+    # Reminder if daemon not running (and not explicitly disabled)
+    show_daemon_hint = use_daemon and not daemon_used
     result_count = len(expanded_results) if expanded_results else len(results)
     console.print(
-        f"[dim]Mode: {mode}{rerank_info}{context_info}{table_info}{daemon_info} | Found: {result_count} results[/dim]\n"
+        f"[dim]Mode: {mode}{rerank_info}{context_info}{table_info}{fiscal_info}{daemon_info} | Found: {result_count} results[/dim]"
     )
+    if show_daemon_hint:
+        console.print("[dim]Tip: Run 'pitch serve --background' for faster searches[/dim]")
+    console.print()  # Blank line before results
 
     if not results:
         console.print("[yellow]No results found.[/yellow]")

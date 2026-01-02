@@ -1176,11 +1176,30 @@ class SECFilingParser(BaseParser["ParsedFiling"]):
         all_chunks = []
         # Use provided hash for section_id, or fall back to source_path
         source_for_id = source_hash if source_hash else filing.source_path
+
+        # Parse fiscal year (e.g., "2026") to integer
+        fiscal_year: int | None = None
+        if filing.fiscal_year:
+            try:
+                fiscal_year = int(filing.fiscal_year)
+            except ValueError:
+                pass
+
+        # Parse fiscal quarter from fiscal_period (e.g., "Q2" -> 2, "FY" -> None)
+        fiscal_quarter: int | None = None
+        if filing.fiscal_period and filing.fiscal_period.upper().startswith("Q"):
+            try:
+                fiscal_quarter = int(filing.fiscal_period[1])
+            except (ValueError, IndexError):
+                pass
+
         metadata = {
             "ticker": filing.ticker,
             "filing_type": filing.filing_type,
             "filing_date": filing.filing_date,
             "source": source_for_id,  # Used for section_id generation
+            "fiscal_year": fiscal_year,
+            "fiscal_quarter": fiscal_quarter,
         }
 
         for section in filing.sections:
