@@ -275,7 +275,7 @@ Generates and manages embeddings using BGE-M3.
 LanceDB-based storage with per-company isolation.
 
 - Hybrid search (vector similarity + BM25 full-text search)
-- Metadata filtering on ticker, filing_type, filing_date, section
+- Metadata filtering on ticker, filing_type, filing_date, section, fiscal_year, fiscal_quarter
 - Incremental indexing with hash-based change detection
 - FTS (full-text search) index for keyword matching
 - Parent-child section storage for context expansion
@@ -778,8 +778,10 @@ class Table:
 **Search Filters** (`src/rag/store.py`, `src/rag/search.py`)
 
 - `content_type`, `table_type`, `is_table_continuation` added to chunk metadata
+- `fiscal_year`, `fiscal_quarter` extracted from iXBRL metadata during parsing
 - `FILTERABLE_COLUMNS` updated in `store.py`
-- `Searcher.search()` accepts `content_type` and `table_type` parameters
+- `Searcher.search()` accepts `content_type`, `table_type`, `fiscal_year`, `fiscal_quarter` parameters
+- CLI supports `-fp` / `--fiscal-period` flag with formats: FY25, FY25Q3, Q3FY25
 
 **Test Corpus**
 
