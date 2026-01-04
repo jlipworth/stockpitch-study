@@ -1,79 +1,35 @@
-# =============================================================================
 # Woodpecker CI Configuration
-# =============================================================================
-# Documentation: https://woodpecker-ci.org/docs/usage/workflow-syntax
-#
-# This config works in two modes:
-# 1. With custom image (jlipworth/stock-pitch-ci) - fast, deps pre-installed
-# 2. With base image (python:3.12-slim) - slower, installs deps on each run
-#
-# The check-deps step handles both cases automatically.
-# To speed up CI, build and push the custom image:
-#   ./ci/build-image.sh --push
-# =============================================================================
+# Requires custom image: ./ci/build-image.sh --push
 
 when:
   - event: pull_request
   - event: push
-    branch: [main, master, github_master]
+    branch: [main, master]
   - event: tag
   - event: cron
     cron: renovate
 
 variables:
-  # Pre-built image with uv and dependencies installed
-  # Rebuild when pyproject.toml changes: ./ci/build-image.sh --push
   - &ci_image jlipworth/stock-pitch-ci:latest
 
-clone:
-  git:
-    image: woodpeckerci/plugin-git
-    settings:
-      depth: 50
-
 steps:
-  # ===========================================================================
-  # Stage 1: Setup Environment (installs deps if needed)
-  # ===========================================================================
-  - name: setup
-    image: *ci_image
-    commands:
-      - echo "=== Setting up CI environment ==="
-      - chmod +x ./ci/check-deps.sh
-      - ./ci/check-deps.sh
-
-  # ===========================================================================
-  # Stage 2: Parallel Linting and Type Checking
-  # ===========================================================================
   - name: lint
     image: *ci_image
-    depends_on: [setup]
     commands:
-      - echo "=== Running ruff linter ==="
-      - uv run ruff check src/ tests/ --output-format=github
-      - echo "=== Checking code formatting ==="
-      - uv run ruff format --check src/ tests/
+      - ruff check src/ tests/ --output-format=github
+      - ruff format --check src/ tests/
 
   - name: typecheck
     image: *ci_image
-    depends_on: [setup]
     commands:
-      - echo "=== Running mypy type checker ==="
-      - uv run mypy src/ --no-error-summary || true
+      - mypy src/ --no-error-summary || true
 
-  # ===========================================================================
-  # Stage 3: Unit Tests
-  # ===========================================================================
   - name: test
     image: *ci_image
     depends_on: [lint]
     commands:
-      - echo "=== Running pytest ==="
-      - uv run pytest -v --tb=short -m "not integration" --junitxml=test-results.xml
+      - pytest -v --tb=short -m "not integration"
 
-  # ===========================================================================
-  # Renovate: Dependency Updates (runs on cron schedule)
-  # ===========================================================================
   - name: renovate
     image: renovate/renovate:latest
     when:
@@ -82,38 +38,5 @@ steps:
     environment:
       RENOVATE_TOKEN:
         from_secret: github_token
-      LOG_LEVEL: info
     commands:
       - renovate --platform github --repositories jlipworth/stockpitch-study
-
-# =============================================================================
-# Secrets Required
-# =============================================================================
-# Add via Woodpecker UI (Repo Settings → Secrets) or CLI:
-#
-#   woodpecker-cli secret add \
-#     --repository jlipworth/stockpitch-study \
-#     --name github_token \
-#     --value "ghp_..."
-#
-# =============================================================================
-# Renovate Cron Setup
-# =============================================================================
-# Create a cron job in Woodpecker (Repo Settings → Cron Jobs):
-#   Name: renovate
-#   Schedule: 0 9 * * 1  (Mondays at 9am, matches renovate.json schedule)
-#   Branch: master
-#
-# =============================================================================
-# Speeding Up CI
-# =============================================================================
-# The base python:3.12-slim image works but is slower (~2-3 min for deps).
-# To speed up CI:
-#
-# 1. Build the custom image:
-#    ./ci/build-image.sh --push
-#
-# 2. Update the ci_image variable above:
-#    - &ci_image jlipworth/stock-pitch-ci:latest
-#
-# 3. Rebuild the image when pyproject.toml changes
