@@ -20,14 +20,16 @@ WORKDIR /workspace
 # Copy dependency files
 COPY pyproject.toml uv.lock ./
 
-# Create venv and install CPU-only PyTorch first (avoids 10GB CUDA packages)
-RUN uv venv && uv pip install torch --index-url https://download.pytorch.org/whl/cpu
-
-# Install remaining dependencies (torch already satisfied)
-RUN uv sync --frozen --all-groups
+# Export deps excluding torch and CUDA packages, then add CPU-only torch
+# Install to /opt/venv so it survives CI workspace mount at /workspace
+RUN uv export --frozen --all-groups --no-emit-project --no-hashes | \
+    grep -v "^torch==" | grep -v "^nvidia-" | grep -v "^triton==" > /tmp/reqs.txt && \
+    uv venv /opt/venv && \
+    uv pip install --python /opt/venv/bin/python -r /tmp/reqs.txt && \
+    uv pip install --python /opt/venv/bin/python torch --index-url https://download.pytorch.org/whl/cpu
 
 # Add venv to PATH so we don't need "uv run" everywhere
-ENV PATH="/workspace/.venv/bin:$PATH"
+ENV PATH="/opt/venv/bin:$PATH"
 
 # Verify installation
 RUN python -c "import torch; print(f'PyTorch {torch.__version__}')"
