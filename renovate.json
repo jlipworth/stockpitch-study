@@ -5,22 +5,12 @@
   ],
   "onboarding": false,
   "minimumReleaseAge": "3 days",
-  "poetry": {
+  "pep621": {
     "enabled": true
   },
   "pre-commit": {
     "enabled": true
   },
-  "customManagers": [
-    {
-      "customType": "regex",
-      "description": "Track Poetry version in ci/Dockerfile",
-      "fileMatch": ["^ci/Dockerfile$"],
-      "matchStrings": ["ENV POETRY_VERSION=(?<currentValue>\\d+\\.\\d+\\.\\d+)"],
-      "depNameTemplate": "python-poetry/poetry",
-      "datasourceTemplate": "github-releases"
-    }
-  ],
   "packageRules": [
     {
       "description": "Auto-merge minor/patch updates for Docker images",
