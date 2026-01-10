@@ -953,7 +953,7 @@ class Summarizer:
             return summaries[0]
 
         combined_input = "\n\n---\n\n".join(
-            f"**Part {i+1} of {len(summaries)}:**\n{s}" for i, s in enumerate(summaries)
+            f"**Part {i + 1} of {len(summaries)}:**\n{s}" for i, s in enumerate(summaries)
         )
 
         system_prompt = f"""You are combining multiple partial summaries of SEC filing section {section_item} ({section_title}) into a single cohesive analysis.
@@ -1007,7 +1007,7 @@ Please combine these partial summaries into a unified section analysis:
             return summaries[0]
 
         combined_input = "\n\n---\n\n".join(
-            f"**Part {i+1} of {len(summaries)}:**\n{s}" for i, s in enumerate(summaries)
+            f"**Part {i + 1} of {len(summaries)}:**\n{s}" for i, s in enumerate(summaries)
         )
 
         system_prompt = f"""You are combining multiple partial summaries of SEC filing section {section_item} ({section_title}) into a single cohesive analysis.
@@ -1086,7 +1086,7 @@ Please combine these partial summaries into a unified section analysis:
         chunk_summaries = []
 
         for i, chunk in enumerate(chunks):
-            chunk_label = f" (Part {i+1}/{len(chunks)})" if len(chunks) > 1 else ""
+            chunk_label = f" (Part {i + 1}/{len(chunks)})" if len(chunks) > 1 else ""
 
             user_message = f"""Filing: {filing_context}
 Section: {section.item} - {section.title}{chunk_label}
@@ -1177,7 +1177,7 @@ Please analyze this section according to the guidelines."""
         chunk_summaries = []
 
         for i, chunk in enumerate(chunks):
-            chunk_label = f" (Part {i+1}/{len(chunks)})" if len(chunks) > 1 else ""
+            chunk_label = f" (Part {i + 1}/{len(chunks)})" if len(chunks) > 1 else ""
 
             user_message = f"""Filing: {filing_context}
 Section: {section.item} - {section.title}{chunk_label}

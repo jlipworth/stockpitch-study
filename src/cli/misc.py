@@ -117,9 +117,9 @@ def process(
         pitch process NVDA --skip-summarize
     """
     ticker = ticker.upper()
-    console.print(f"\n[bold blue]{'='*50}[/bold blue]")
+    console.print(f"\n[bold blue]{'=' * 50}[/bold blue]")
     console.print(f"[bold blue] Stock Pitch Pipeline: {ticker}[/bold blue]")
-    console.print(f"[bold blue]{'='*50}[/bold blue]\n")
+    console.print(f"[bold blue]{'=' * 50}[/bold blue]\n")
 
     filing_types = [t.strip() for t in types.split(",")]
 
@@ -336,9 +336,9 @@ def process(
             console.print(f"[yellow]Summarization error: {e}[/yellow]\n")
 
     # ========== SUMMARY ==========
-    console.print(f"[bold green]{'='*50}[/bold green]")
+    console.print(f"[bold green]{'=' * 50}[/bold green]")
     console.print(f"[bold green] Pipeline complete for {ticker}![/bold green]")
-    console.print(f"[bold green]{'='*50}[/bold green]")
+    console.print(f"[bold green]{'=' * 50}[/bold green]")
     console.print(f"\nData:      {DATA_DIR / ticker}")
     console.print(f"Index:     {INDEX_DIR / ticker}")
     console.print(f"Summaries: {PROCESSED_DIR / ticker}")

@@ -74,9 +74,7 @@ def _build_where_clause(filter_dict: dict[str, Any]) -> str | None:
     for key, value in filter_dict.items():
         # Validate column name against allowlist
         if key not in FILTERABLE_COLUMNS:
-            raise ValueError(
-                f"Invalid filter column '{key}'. " f"Allowed columns: {', '.join(sorted(FILTERABLE_COLUMNS))}"
-            )
+            raise ValueError(f"Invalid filter column '{key}'. Allowed columns: {', '.join(sorted(FILTERABLE_COLUMNS))}")
 
         if isinstance(value, list):
             if not value:

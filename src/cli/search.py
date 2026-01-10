@@ -180,7 +180,7 @@ def search(
     # Validate table_type if provided
     valid_table_types = ("financial_statement", "compensation", "comparison", "other")
     if table_type is not None and table_type not in valid_table_types:
-        console.print(f"[red]Invalid table type: {table_type}. " f"Use one of: {', '.join(valid_table_types)}[/red]")
+        console.print(f"[red]Invalid table type: {table_type}. Use one of: {', '.join(valid_table_types)}[/red]")
         raise typer.Exit(1)
 
     # Parse fiscal period filter
@@ -190,8 +190,7 @@ def search(
         fiscal_year, fiscal_quarter = _parse_fiscal_period(fiscal_period)
         if fiscal_year is None:
             console.print(
-                f"[red]Invalid fiscal period: {fiscal_period}. "
-                f"Use format like FY25, FY2025, FY25Q3, or Q3FY25[/red]"
+                f"[red]Invalid fiscal period: {fiscal_period}. Use format like FY25, FY2025, FY25Q3, or Q3FY25[/red]"
             )
             raise typer.Exit(1)
 

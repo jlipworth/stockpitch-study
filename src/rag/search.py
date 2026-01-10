@@ -434,7 +434,7 @@ class Searcher:
         approx_tokens = section.get("approx_tokens", 0)
         if approx_tokens > max_tokens:
             logger.debug(
-                f"Section {result.section_id} too large ({approx_tokens} tokens > {max_tokens}), " "using window mode"
+                f"Section {result.section_id} too large ({approx_tokens} tokens > {max_tokens}), using window mode"
             )
             return self._get_window_context(result, fallback_window), "window"
 

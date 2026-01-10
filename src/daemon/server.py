@@ -142,9 +142,7 @@ class EmbeddingDaemon:
         """Get calculated batch sizes."""
         if self._batch_sizes is None:
             self._batch_sizes = calculate_batch_sizes()
-            logger.info(
-                f"Batch sizes calculated: embed={self._batch_sizes.embed}, " f"rerank={self._batch_sizes.rerank}"
-            )
+            logger.info(f"Batch sizes calculated: embed={self._batch_sizes.embed}, rerank={self._batch_sizes.rerank}")
         return self._batch_sizes
 
     def get_health_info(self) -> HealthInfo:

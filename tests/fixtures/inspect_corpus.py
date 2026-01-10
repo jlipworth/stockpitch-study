@@ -28,9 +28,9 @@ def load_corpus(path: Path = None) -> list[dict[str, Any]]:
 
 def show_stats(tables: list[dict[str, Any]]):
     """Display corpus statistics."""
-    print(f"{'='*60}")
+    print(f"{'=' * 60}")
     print("TABLE CORPUS STATISTICS")
-    print(f"{'='*60}\n")
+    print(f"{'=' * 60}\n")
 
     print(f"Total tables: {len(tables)}\n")
 
@@ -38,22 +38,22 @@ def show_stats(tables: list[dict[str, Any]]):
     print("Filing Type Distribution:")
     filing_counts = Counter(t["filing_type"] for t in tables)
     for filing_type, count in sorted(filing_counts.items()):
-        print(f"  {filing_type:10s}: {count:3d} ({count/len(tables)*100:5.1f}%)")
+        print(f"  {filing_type:10s}: {count:3d} ({count / len(tables) * 100:5.1f}%)")
 
     # Table types
     print("\nTable Type Distribution:")
     type_counts = Counter(t["table_type"] for t in tables)
     for table_type, count in sorted(type_counts.items()):
-        print(f"  {table_type:20s}: {count:3d} ({count/len(tables)*100:5.1f}%)")
+        print(f"  {table_type:20s}: {count:3d} ({count / len(tables) * 100:5.1f}%)")
 
     # Size distribution
     print("\nSize Distribution:")
     small = sum(1 for t in tables if t["rows"] <= 5)
     medium = sum(1 for t in tables if 6 <= t["rows"] <= 20)
     large = sum(1 for t in tables if t["rows"] > 20)
-    print(f"  Small (2-5 rows):   {small:3d} ({small/len(tables)*100:5.1f}%)")
-    print(f"  Medium (6-20 rows): {medium:3d} ({medium/len(tables)*100:5.1f}%)")
-    print(f"  Large (21+ rows):   {large:3d} ({large/len(tables)*100:5.1f}%)")
+    print(f"  Small (2-5 rows):   {small:3d} ({small / len(tables) * 100:5.1f}%)")
+    print(f"  Medium (6-20 rows): {medium:3d} ({medium / len(tables) * 100:5.1f}%)")
+    print(f"  Large (21+ rows):   {large:3d} ({large / len(tables) * 100:5.1f}%)")
 
     # Dimensions
     print("\nDimension Statistics:")
@@ -72,9 +72,9 @@ def show_stats(tables: list[dict[str, Any]]):
     print("\nTemporal Distribution:")
     year_counts = Counter(t["filing_date"][:4] for t in tables)
     for year, count in sorted(year_counts.items()):
-        print(f"  {year}: {count:3d} ({count/len(tables)*100:5.1f}%)")
+        print(f"  {year}: {count:3d} ({count / len(tables) * 100:5.1f}%)")
 
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
 
 
 def show_table(tables: list[dict[str, Any]], table_id: str):
@@ -85,9 +85,9 @@ def show_table(tables: list[dict[str, Any]], table_id: str):
         print(f"Table '{table_id}' not found.")
         return
 
-    print(f"{'='*60}")
+    print(f"{'=' * 60}")
     print(f"TABLE: {table['id']}")
-    print(f"{'='*60}\n")
+    print(f"{'=' * 60}\n")
 
     print(f"Filing Type:  {table['filing_type']}")
     print(f"Filing Date:  {table['filing_date']}")
@@ -97,9 +97,9 @@ def show_table(tables: list[dict[str, Any]], table_id: str):
     print(f"Dimensions:   {table['rows']} rows × {table['cols']} columns")
     print(f"Source:       {Path(table['source_file']).name}")
 
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print("MARKDOWN:")
-    print(f"{'='*60}\n")
+    print(f"{'=' * 60}\n")
 
     if table["markdown"] == "[Table too large for markdown conversion]":
         print("Table too large to convert to markdown.")
@@ -113,7 +113,7 @@ def show_table(tables: list[dict[str, Any]], table_id: str):
         if len(lines) > 30:
             print(f"\n... ({len(lines) - 30} more lines)")
 
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
 
 
 def list_tables(tables: list[dict[str, Any]], filing_type: str = None, table_type: str = None):
@@ -126,9 +126,9 @@ def list_tables(tables: list[dict[str, Any]], filing_type: str = None, table_typ
     if table_type:
         filtered = [t for t in filtered if t["table_type"] == table_type]
 
-    print(f"{'='*80}")
+    print(f"{'=' * 80}")
     print(f"TABLES (filtered: {len(filtered)} / {len(tables)} total)")
-    print(f"{'='*80}\n")
+    print(f"{'=' * 80}\n")
 
     for t in filtered:
         caption_preview = t["caption"][:60]
@@ -140,7 +140,7 @@ def list_tables(tables: list[dict[str, Any]], filing_type: str = None, table_typ
             f"{t['table_type']:15s}  {caption_preview}"
         )
 
-    print(f"\n{'='*80}")
+    print(f"\n{'=' * 80}")
 
 
 def show_samples(tables: list[dict[str, Any]], n: int = 5):
@@ -150,9 +150,9 @@ def show_samples(tables: list[dict[str, Any]], n: int = 5):
     samples = random.sample(tables, min(n, len(tables)))
 
     for table in samples:
-        print(f"\n{'='*60}")
+        print(f"\n{'=' * 60}")
         print(f"SAMPLE: {table['id']}")
-        print(f"{'='*60}")
+        print(f"{'=' * 60}")
         print(f"Type: {table['table_type']}, Size: {table['rows']}×{table['cols']}")
         print(f"Caption: {table['caption'][:100]}")
 
