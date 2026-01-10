@@ -236,7 +236,7 @@ def query(
 
     # For now, query uses the search command directly since SEARCH type
     # is not fully implemented in daemon. This is a placeholder.
-    console.print("[yellow]Note: Full daemon search not yet implemented. " "Using pitch search instead.[/yellow]")
+    console.print("[yellow]Note: Full daemon search not yet implemented. Using pitch search instead.[/yellow]")
 
     # Fall back to regular search command
     from src.cli.search import search

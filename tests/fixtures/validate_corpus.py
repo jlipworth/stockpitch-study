@@ -197,7 +197,7 @@ def validate_corpus(corpus_path: Path = None):
         f"{min(t['cols'] for t in tables)}-{max(t['cols'] for t in tables)} cols"
     )
     print(
-        f"Markdown success rate: {successful_markdown}/{len(tables)} " f"({successful_markdown/len(tables)*100:.1f}%)"
+        f"Markdown success rate: {successful_markdown}/{len(tables)} ({successful_markdown / len(tables) * 100:.1f}%)"
     )
 
     print("\n" + "=" * 60)

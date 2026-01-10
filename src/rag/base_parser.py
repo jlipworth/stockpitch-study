@@ -10,10 +10,6 @@ Provides a common interface for all parser implementations:
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Generic, TypeVar
-
-# Generic type for parsed results
-T = TypeVar("T")
 
 
 @dataclass
@@ -28,7 +24,7 @@ class ParsedDocument:
     pass
 
 
-class BaseParser(ABC, Generic[T]):
+class BaseParser[T](ABC):
     """Abstract base class for document parsers.
 
     All parsers should inherit from this class and implement

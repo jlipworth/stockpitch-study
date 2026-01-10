@@ -15,20 +15,30 @@ variables:
 steps:
   - name: lint
     image: *ci_image
+    pull: true
+    environment:
+      UV_PROJECT_ENVIRONMENT: /tmp/venv
     commands:
-      - ruff check src/ tests/ --output-format=github
-      - ruff format --check src/ tests/
+      - uv sync --frozen --only-group dev
+      - /tmp/venv/bin/ruff check src/ tests/ --output-format=github
+      - /tmp/venv/bin/ruff format --check src/ tests/
 
   - name: typecheck
     image: *ci_image
+    pull: true
+    environment:
+      UV_PROJECT_ENVIRONMENT: /tmp/venv
     commands:
-      - mypy src/ --no-error-summary || true
+      - uv sync --frozen --only-group dev
+      - MYPYPATH=src /tmp/venv/bin/mypy src/ --no-error-summary || true
 
   - name: test
     image: *ci_image
+    pull: true
     depends_on: [lint]
     commands:
-      - pytest -v --tb=short -m "not integration"
+      # Use pre-built /opt/venv with CPU-only torch (no CUDA packages)
+      - /opt/venv/bin/pytest tests/ -m "not integration" -v
 
   - name: renovate
     image: renovate/renovate:latest
@@ -40,3 +50,33 @@ steps:
         from_secret: github_token
     commands:
       - renovate --platform github --repositories jlipworth/stockpitch-study
+
+  - name: notify-success
+    image: appleboy/drone-discord
+    depends_on: [lint, typecheck, test]
+    when:
+      - status: success
+    settings:
+      webhook_id:
+        from_secret: discord_id
+      webhook_token:
+        from_secret: discord_token
+      message: >
+        Build succeeded for {{repo.name}}
+        Branch: {{commit.branch}}
+        {{build.link}}
+
+  - name: notify-failure
+    image: appleboy/drone-discord
+    depends_on: [lint, typecheck, test]
+    when:
+      - status: failure
+    settings:
+      webhook_id:
+        from_secret: discord_id
+      webhook_token:
+        from_secret: discord_token
+      message: >
+        Build failed for {{repo.name}}
+        Branch: {{commit.branch}}
+        {{build.link}}

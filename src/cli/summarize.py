@@ -404,7 +404,7 @@ def _summarize_pdf_file(
             total_out = 0
 
             for i, section in enumerate(sections):
-                progress.update(task, description=f"[{i+1}/{len(sections)}] {section.item}...")
+                progress.update(task, description=f"[{i + 1}/{len(sections)}] {section.item}...")
                 summary = summarizer.summarize_section(
                     section,
                     filing_context=f"{ticker} {doc_type.title()} ({file_date})",

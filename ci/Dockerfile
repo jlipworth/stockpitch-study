@@ -1,37 +1,38 @@
-# CI base image for stock-pitch
-# Build: ./ci/build-image.sh
-# Push:  ./ci/build-image.sh --push
+# ci/Dockerfile
+# Base image for stock-pitch CI testing
+# Contains Python 3.12, uv, and pre-cached wheels for fast installs
+#
+# Build and push using: ./ci/build-image.sh --push
 
 FROM python:3.12-slim
 
-LABEL maintainer="Jonathan Lipworth <jonathan.lipworth@gmail.com>"
+ENV DEBIAN_FRONTEND=noninteractive
 
-# Copy uv from official image (recommended approach)
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
-
-# System dependencies
+# Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    git \
+    git ca-certificates curl build-essential \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /workspace
+# Install uv from official image (faster than pip)
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
-# Copy dependency files
+# Pre-cache dev dependency wheels (for lint/typecheck)
+WORKDIR /tmp/cache-build
 COPY pyproject.toml uv.lock ./
+RUN uv sync --frozen --only-group dev --no-install-project && rm -rf .venv
 
-# Export deps excluding torch and CUDA packages, then add CPU-only torch
-# Install to /opt/venv so it survives CI workspace mount at /workspace
+# Pre-cache main deps (filtering CUDA/torch) and install CPU-only torch
+# This creates /opt/venv for the test step to use directly
+# Install CPU torch FIRST so transitive deps (sentence-transformers) use it
 RUN uv export --frozen --all-groups --no-emit-project --no-hashes | \
-    grep -v "^torch==" | grep -v "^nvidia-" | grep -v "^triton==" > /tmp/reqs.txt && \
+    grep -v "^nvidia-" | grep -v "^triton==" | grep -v "^torch==" > /tmp/reqs.txt && \
     uv venv /opt/venv && \
+    uv pip install --python /opt/venv/bin/python torch --index-url https://download.pytorch.org/whl/cpu && \
     uv pip install --python /opt/venv/bin/python -r /tmp/reqs.txt && \
-    uv pip install --python /opt/venv/bin/python torch --index-url https://download.pytorch.org/whl/cpu
+    rm -f /tmp/reqs.txt
 
-# Add venv to PATH so we don't need "uv run" everywhere
-ENV PATH="/opt/venv/bin:$PATH"
-
-# Verify installation
-RUN python -c "import torch; print(f'PyTorch {torch.__version__}')"
+# Clean up temp dir
+WORKDIR /
+RUN rm -rf /tmp/cache-build
 
 CMD ["bash"]

@@ -245,7 +245,7 @@ class NotesConverter:
 
         total_in = sum(p.input_tokens for p in pages)
         total_out = sum(p.output_tokens for p in pages)
-        logger.info(f"Conversion complete: {num_pages} pages, " f"{total_in} input / {total_out} output tokens")
+        logger.info(f"Conversion complete: {num_pages} pages, {total_in} input / {total_out} output tokens")
 
         return ConversionResult(
             source_path=str(pdf_path),
