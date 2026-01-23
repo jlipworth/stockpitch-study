@@ -4,7 +4,7 @@
     "config:recommended"
   ],
   "onboarding": false,
-  "minimumReleaseAge": "3 days",
+  "minimumReleaseAge": "14 days",
   "pep621": {
     "enabled": true
   },
@@ -35,6 +35,5 @@
   "prHourlyLimit": 2,
   "prConcurrentLimit": 5,
   "labels": ["dependencies"],
-  "commitMessagePrefix": "chore(deps):",
-  "schedule": ["after 9am on Monday"]
+  "commitMessagePrefix": "chore(deps):"
 }

@@ -47,9 +47,30 @@ steps:
         cron: renovate
     environment:
       RENOVATE_TOKEN:
-        from_secret: github_token
+        from_secret: github_pat
+      RENOVATE_PLATFORM: github
+      RENOVATE_REPOSITORIES: jlipworth/stockpitch-study
+      RENOVATE_GIT_AUTHOR: "Renovate Bot <renovate@noreply.github.com>"
+      LOG_LEVEL: info
     commands:
-      - renovate --platform github --repositories jlipworth/stockpitch-study
+      - renovate
+
+  - name: notify-renovate
+    image: appleboy/drone-discord
+    depends_on:
+      - renovate
+    when:
+      - event: cron
+        cron: renovate
+    settings:
+      webhook_id:
+        from_secret: discord_id
+      webhook_token:
+        from_secret: discord_token
+      message: >
+        🔄 **Renovate** completed for {{repo.name}}
+        Check for new dependency update PRs
+        {{build.link}}
 
   - name: notify-success
     image: appleboy/drone-discord
