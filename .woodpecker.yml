@@ -8,6 +8,7 @@ when:
   - event: tag
   - event: cron
     cron: renovate
+  - event: manual
 
 variables:
   - &ci_image jlipworth/stock-pitch-ci:latest
