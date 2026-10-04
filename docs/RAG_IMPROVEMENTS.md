@@ -469,6 +469,7 @@ from dataclasses import dataclass
 # Optional: Use spaCy for sentence segmentation
 try:
     import spacy
+
     HAS_SPACY = True
 except ImportError:
     HAS_SPACY = False
@@ -477,6 +478,7 @@ except ImportError:
 @dataclass
 class SemanticChunk:
     """A semantically coherent chunk."""
+
     text: str
     chunk_type: str  # "paragraph", "list", "heading", "table"
     confidence: float  # How confident we are this is a complete unit
@@ -539,6 +541,7 @@ def chunk_section(
 ) -> list[Chunk]:
     if use_semantic_chunking:
         from .semantic_chunker import SemanticChunker
+
         chunker = SemanticChunker(...)
         semantic_chunks = chunker.chunk(section.content)
         # Convert to Chunk objects with metadata
@@ -645,6 +648,7 @@ from anthropic import Anthropic
 @dataclass
 class HopResult:
     """Result from a single retrieval hop."""
+
     sub_question: str
     answer: str
     sources: list
@@ -654,6 +658,7 @@ class HopResult:
 @dataclass
 class MultiHopResponse:
     """Response from multi-hop retrieval."""
+
     original_question: str
     sub_questions: list[str]
     hop_results: list[HopResult]
@@ -706,6 +711,7 @@ from dataclasses import dataclass, field
 # Optional: spaCy for NER
 try:
     import spacy
+
     HAS_SPACY = True
 except ImportError:
     HAS_SPACY = False
@@ -714,8 +720,9 @@ except ImportError:
 @dataclass
 class EnrichedMetadata:
     """Semantic metadata extracted from chunk."""
+
     entities: list[str] = field(default_factory=list)  # Named entities
-    metrics: list[str] = field(default_factory=list)   # Financial metrics
+    metrics: list[str] = field(default_factory=list)  # Financial metrics
     time_periods: list[str] = field(default_factory=list)  # Dates/periods
     has_numbers: bool = False
     has_percentages: bool = False
@@ -728,14 +735,14 @@ class ChunkEnricher:
     """Extract semantic metadata from chunks."""
 
     METRIC_PATTERNS = [
-        r'\b(revenue|sales|income|profit|EBITDA|margin|growth|return)\b',
-        r'\b(ROE|ROA|ROI|ROIC|EPS|P/E|NIM|ARR|MRR|NRR)\b',
+        r"\b(revenue|sales|income|profit|EBITDA|margin|growth|return)\b",
+        r"\b(ROE|ROA|ROI|ROIC|EPS|P/E|NIM|ARR|MRR|NRR)\b",
     ]
 
     TIME_PATTERNS = [
-        r'\b(Q[1-4])\s*(\d{4})?\b',
-        r'\b(FY|fiscal\s+year)\s*(\d{4})?\b',
-        r'\b(20\d{2})\b',
+        r"\b(Q[1-4])\s*(\d{4})?\b",
+        r"\b(FY|fiscal\s+year)\s*(\d{4})?\b",
+        r"\b(20\d{2})\b",
     ]
 
     def enrich(self, text: str) -> EnrichedMetadata:

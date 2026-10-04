@@ -190,10 +190,10 @@ question_files = load_question_files(questions_dir, section_filter="analyst_opin
 # Configure what questions to run
 config = RunnerConfig(
     concurrency=3,
-    retry_errors=True,         # Re-run questions with ERROR status
+    retry_errors=True,  # Re-run questions with ERROR status
     retry_needs_deeper=False,  # Skip needs_deeper questions
-    section_filter=None,       # All sections
-    test_mode=5,               # Only run 5 random questions (for testing)
+    section_filter=None,  # All sections
+    test_mode=5,  # Only run 5 random questions (for testing)
 )
 
 # Collect questions that need processing

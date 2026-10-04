@@ -322,14 +322,17 @@ Persistent embedding server for fast searches.
 @dataclass
 class ParentDocument:
     """A logical document unit (e.g., a section)"""
+
     doc_id: str  # e.g., "10K_2024_Item1A_Risk_Factors"
     text: str  # Full section text
     metadata: dict
     child_chunks: list[str]  # IDs of child chunks
 
+
 @dataclass
 class ChildChunk:
     """A searchable chunk within a parent"""
+
     chunk_id: str
     parent_id: str
     text: str
@@ -370,9 +373,10 @@ def get_chunk_with_context(
     self,
     chunk_id: str,
     before: int = 1,  # Chunks before
-    after: int = 1,   # Chunks after
+    after: int = 1,  # Chunks after
 ) -> list[SearchResult]:
     """Fetch chunk with surrounding context"""
+
 
 def expand_results_with_context(
     self,
@@ -392,6 +396,7 @@ def expand_results_with_context(
 @dataclass
 class TableChunk:
     """Special chunk type for tables"""
+
     table_id: str
     caption: str
     headers: list[str]
@@ -494,12 +499,13 @@ class SemanticChunker:
 ```python
 CHUNK_SIZE_BY_CONTENT = {
     "executive_summary": 2000,  # Preserve narrative
-    "risk_factors": 1500,        # One risk per chunk
-    "mda": 1500,                 # Preserve analysis
-    "financial_statements": 500, # Smaller, table-focused
+    "risk_factors": 1500,  # One risk per chunk
+    "mda": 1500,  # Preserve analysis
+    "financial_statements": 500,  # Smaller, table-focused
     "business_description": 1200,
     "default": 1000,
 }
+
 
 class AdaptiveChunker:
     """Adjust chunk size by content type"""
@@ -521,11 +527,11 @@ class QueryClassifier:
     """Classify queries to optimize search strategy"""
 
     QUERY_TYPES = {
-        "exact_metric": {"vector": 0.3, "fts": 0.7},      # "Q2 revenue"
-        "conceptual": {"vector": 0.8, "fts": 0.2},        # "What are risks?"
-        "entity": {"vector": 0.2, "fts": 0.8},            # "{COMPANY}"
-        "trend": {"vector": 0.6, "fts": 0.4},             # "revenue growth"
-        "comparison": {"vector": 0.7, "fts": 0.3},        # "compare 2023 vs 2024"
+        "exact_metric": {"vector": 0.3, "fts": 0.7},  # "Q2 revenue"
+        "conceptual": {"vector": 0.8, "fts": 0.2},  # "What are risks?"
+        "entity": {"vector": 0.2, "fts": 0.8},  # "{COMPANY}"
+        "trend": {"vector": 0.6, "fts": 0.4},  # "revenue growth"
+        "comparison": {"vector": 0.7, "fts": 0.3},  # "compare 2023 vs 2024"
     }
 
     def classify(self, query: str) -> dict[str, float]:
@@ -546,6 +552,7 @@ class SearchFeedback:
     results: list[SearchResult]
     selected_results: list[int]  # Which results user clicked/used
     timestamp: datetime
+
 
 # Log to JSONL for analysis
 # Analyze patterns:
@@ -755,8 +762,8 @@ def expand_results_with_parent(results: list[SearchResult]) -> list[SearchResult
 @dataclass
 class Table:
     table_id: str
-    html: str        # Raw HTML for future rendering
-    markdown: str    # Markdown for search/embedding
+    html: str  # Raw HTML for future rendering
+    markdown: str  # Markdown for search/embedding
     caption: str
     table_type: str  # financial_statement, compensation, governance, comparison, schedule, metrics, other
     approx_tokens: int
@@ -814,12 +821,12 @@ class QueryExpander:
 
 ```python
 class QueryType(Enum):
-    EXACT_METRIC = "exact_metric"   # "Q2 2024 revenue" -> vector: 0.3, fts: 0.7
-    CONCEPTUAL = "conceptual"        # "What are the main risks?" -> vector: 0.8, fts: 0.2
-    ENTITY = "entity"                # "{COMPANY} AG" -> vector: 0.2, fts: 0.8
-    TREND = "trend"                  # "revenue growth over time" -> vector: 0.6, fts: 0.4
-    COMPARISON = "comparison"        # "compare 2023 vs 2024" -> vector: 0.7, fts: 0.3
-    GENERAL = "general"              # default -> vector: 0.7, fts: 0.3
+    EXACT_METRIC = "exact_metric"  # "Q2 2024 revenue" -> vector: 0.3, fts: 0.7
+    CONCEPTUAL = "conceptual"  # "What are the main risks?" -> vector: 0.8, fts: 0.2
+    ENTITY = "entity"  # "{COMPANY} AG" -> vector: 0.2, fts: 0.8
+    TREND = "trend"  # "revenue growth over time" -> vector: 0.6, fts: 0.4
+    COMPARISON = "comparison"  # "compare 2023 vs 2024" -> vector: 0.7, fts: 0.3
+    GENERAL = "general"  # default -> vector: 0.7, fts: 0.3
 ```
 
 - Pattern-based classification using regex
