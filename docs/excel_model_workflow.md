@@ -96,7 +96,7 @@ def find_row_by_label(ws, search_term, column=1):
 
 ```python
 # Letter to index
-col_idx = column_index_from_string('BP')  # Returns 68
+col_idx = column_index_from_string("BP")  # Returns 68
 
 # Index to letter
 col_letter = get_column_letter(68)  # Returns 'BP'
@@ -106,7 +106,7 @@ col_letter = get_column_letter(68)  # Returns 'BP'
 
 ```python
 # Replace CIQ formulas with Model references
-for col in ['D', 'E', 'F', 'G', 'H']:
+for col in ["D", "E", "F", "G", "H"]:
     model_col = col_mapping[col]
     for ts_row, model_row in row_mapping.items():
         ws[f"{col}{ts_row}"] = f"=Model!{model_col}{model_row}"
