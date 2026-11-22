@@ -53,6 +53,10 @@ steps:
       RENOVATE_REPOSITORIES: jlipworth/stockpitch-study
       RENOVATE_GIT_AUTHOR: "Renovate Bot <renovate@noreply.github.com>"
       LOG_LEVEL: info
+      # Exit non-zero when the repo run ends in a known error state (e.g.
+      # repository-changed -> 6), so a broken run turns the step red instead
+      # of passing silently. Experimental option; see Renovate self-hosted docs.
+      RENOVATE_EXIT_CODE_FOR_ERRORS: "true"
     commands:
       - renovate
 
@@ -63,14 +67,15 @@ steps:
     when:
       - event: cron
         cron: renovate
+        status: [success, failure]
     settings:
       webhook_id:
         from_secret: discord_id
       webhook_token:
         from_secret: discord_token
       message: >
-        🔄 **Renovate** completed for {{repo.name}}
-        Check for new dependency update PRs
+        🔄 **Renovate** {{build.status}} for {{repo.name}}
+        Check for new dependency update PRs (or the failure log)
         {{build.link}}
 
   - name: notify-success
